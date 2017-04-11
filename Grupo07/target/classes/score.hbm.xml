@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-
+//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate
+-mapping-3.0.dtd">
+
+<hibernate-mapping package=“model">
+	<class name=“Score" table=“SCORE">
+		<id name=“idScore" column="ID_SCORE">
+			<generator class="native"/>
+		</id>
+		 <many-to-one name="passenger"
+			column="ID_PASSENGER"
+			unique="true"
+			not-null="true"
+			cascade="all" />
+		<many-to-one name="trip"
+			column="ID_TRIP"
+			unique="true"
+			not-null="true"
+			cascade="all" />
+	</class>
+</hibernate-mapping>
+

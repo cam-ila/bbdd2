@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-
+//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate
+-mapping-3.0.dtd">
+
+<hibernate-mapping package=“model">
+	<class name=“Trip" table=“TRIP">
+		<id name=“idTrip" column="ID_TRIP>
+			<generator class="native"/>
+		</id>
+	</class>
+</hibernate-mapping>
+
