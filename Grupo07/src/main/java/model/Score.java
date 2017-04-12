@@ -10,6 +10,12 @@ public class Score {
 		
 	}
 	
+	public Score(Trip trip, Passenger passenger, Integer score){
+		this.trip = trip;
+		this.passenger = passenger;
+		this.score = score;
+	}
+	
 	public Trip getTrip() {
 		return trip;
 	}
