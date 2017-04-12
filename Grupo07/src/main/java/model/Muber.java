@@ -8,6 +8,10 @@ public class Muber {
 	private Collection<Driver> drivers;
 	private Collection<Passenger> passengers;
 	private Date licenceDate;
+	
+	public Muber(){
+		
+	}
 
 	public Date getLicenceDate() {
 		return licenceDate;

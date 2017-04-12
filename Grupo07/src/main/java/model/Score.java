@@ -4,6 +4,11 @@ public class Score {
 	private Trip trip;
 	private Passenger passenger;
 	private Integer	score;
+	private Long idScore;
+	
+	public Score(){
+		
+	}
 	
 	public Trip getTrip() {
 		return trip;
@@ -22,6 +27,12 @@ public class Score {
 	}
 	public void setScore(Integer score) {
 		this.score = score;
+	}
+	public Long getIdScore() {
+		return idScore;
+	}
+	public void setIdScore(Long idScore) {
+		this.idScore = idScore;
 	}
 	
 }

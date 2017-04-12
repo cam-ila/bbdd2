@@ -1,14 +1,19 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-
 //Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate
--mapping-3.0.dtd">
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package=“model">
 	<class name=“Driver" table=“DRIVER">
 		<id name=“idDriver" column="ID_DRIVER>
 			<generator class="native"/>
 		</id>
+		<set name="trips" 
+			 cascade="all"
+			 inverse="true">
+			<key column="ID_DRIVER"
+			not-null="true"/>
+			<one-to-many class="Trip" />
+		</set>
 	</class>
 </hibernate-mapping>
-

@@ -9,6 +9,19 @@
 		<id name=“idTrip" column="ID_TRIP>
 			<generator class="native"/>
 		</id>
+		<set name="passengers" 
+			 cascade="all">
+			<key column="ID_TRIP"
+			not-null="true"/>
+			<one-to-many class="Passenger" />
+		</set>
+		<set name="scores" 
+			 cascade="all"
+			 inverse="true">
+			<key column="ID_TRIP"
+			not-null="true"/>
+			<one-to-many class="Score" />
+		</set>
 	</class>
 </hibernate-mapping>
 
