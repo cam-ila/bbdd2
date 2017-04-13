@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-
-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate
--mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package=“model">
 	<class name=“Trip" table=“TRIP">
 		<id name=“idTrip" column="ID_TRIP>
 			<generator class="native"/>
 		</id>
+		
+		<!-- 	Muchos trips pertenecen a un driver.  -->
+		<many-to-one name="driver" column="ID_USER" not-null="true" cascade="all" />
 		<set name="passengers" 
 			 cascade="all">
 			<key column="ID_TRIP"
@@ -18,10 +20,17 @@
 		<set name="scores" 
 			 cascade="all"
 			 inverse="true">
+<!-- 		el inverse lo hace bidireccional -->
 			<key column="ID_TRIP"
 			not-null="true"/>
 			<one-to-many class="Score" />
 		</set>
+		<property name="from" />
+		<property name="to" />
+		<property name="price" />
+		<property name="date" />
+		<property name="maxPassenger" />
+		<property name="state" />
 	</class>
 </hibernate-mapping>
 

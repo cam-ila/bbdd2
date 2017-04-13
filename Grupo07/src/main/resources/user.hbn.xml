@@ -8,7 +8,25 @@
 		<id name=“idUser" column="ID_USER">
 			<generator class="native"/>
 		</id>
-	<property name="name“ not-null=“true”/>
-	<property name=“password" not-null=“true”/>
+		<property name="name“ not-null=“true”/>
+		<property name=“password" not-null=“true”/>
+		
+<!-- 		DRIVER -->
+		<union-subclass name="Driver" table="DRIVER">
+			<property name="licenseDate" />
+			<set name="trips" cascade="all" inverse="true">	<!-- el inverse lo hace bidireccional -->
+				<key column="ID_USER" not-null="true"/>
+				<one-to-many class="Trip" />
+			</set>
+		</union-subclass>
+		
+<!-- 		PASSENGER -->
+		<union-subclass name="Passenger" table="PASSENGER">
+			<set name="scores" cascade="all" inverse="true"> <!-- el inverse lo hace bidireccional -->
+				<key column="ID_USER" not-null="true"/>
+				<one-to-many class="Score" />
+			</set>
+		</union-subclass>
+		
 	</class>
 </hibernate-mapping>
