@@ -36,7 +36,7 @@ public class Muber {
 				Collection<Trip> trips = iterator.next().getTrips();
 				for(Iterator<Trip> iterator2 = trips.iterator(); iterator2.hasNext(); ){
 					Trip trip = iterator2.next();
-					if(trip.getState() == true){
+					if(trip.getState() == "true"){
 						openTrips.add(trip);
 					}
 				}

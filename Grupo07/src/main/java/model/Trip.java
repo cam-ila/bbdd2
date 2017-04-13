@@ -13,21 +13,30 @@ public class Trip {
 	private String to;
 	private Date date;
 	private Integer maxPassenger;
-	private Boolean state;
-	private Long idTrip;
+	private String state;
+	private double price;
+	public double getPrice() {
+		return price;
+	}
 
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	private Long idTrip;
+	
 	
 	public Trip(){
 		
 	}
 	
-	public Trip(Driver d, String f, String t, Date da,Integer max){
+	public Trip(Driver d, String f, String t, Date da,Integer max, String s, double p){
 		driver= d;
 		from= f;
 		to= t;
 		date= da;
 		maxPassenger= max;
-		state= true;
+		state= s;
+		price=p;
 	}
 	
 	public Collection<Passenger> getPassengers() {
@@ -83,10 +92,10 @@ public class Trip {
 	public void setMaxPassenger(Integer maxPassenger) {
 		this.maxPassenger = maxPassenger;
 	}
-	public Boolean getState() {
+	public String getState() {
 		return state;
 	}
-	public void setState(Boolean state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 	public Long getIdTrip() {

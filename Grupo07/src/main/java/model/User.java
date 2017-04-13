@@ -3,18 +3,18 @@ package model;
 public class User {
 	
 	private Long idUser;
-	private String name;
+	private String fullName;
 	private String password;
 	
 	public User(){
 		
 	}
 	
-	public String getName() {
-		return name;
+	public String getFullName() {
+		return fullName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setFullName(String name) {
+		this.fullName = name;
 	}
 	public String getPassword() {
 		return password;

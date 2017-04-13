@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC 
 "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package=“model">
-	<class name=“Trip" table=“TRIP">
-		<id name=“idTrip" column="ID_TRIP>
+<hibernate-mapping package="model">
+	<class name="Trip" table="TRIP">
+		<id name="idTrip" column="ID_TRIP">
 			<generator class="native"/>
 		</id>
 		
@@ -25,12 +25,12 @@
 			not-null="true"/>
 			<one-to-many class="Score" />
 		</set>
-		<property name="from" />
-		<property name="to" />
-		<property name="price" />
-		<property name="date" />
-		<property name="maxPassenger" />
-		<property name="state" />
+		<property name="from" column="FROM" type="string" />
+		<property name="to" column="TO" type="string"/>
+		<property name="price" column="PRICE" type="double"/>
+		<property name="date" column="DATE" type="timestap" />
+		<property name="maxPassenger" column="MAX_PASSENGER" type="integer"/>
+		<property name="state" column="STATE" type="string" />
 	</class>
 </hibernate-mapping>
 
