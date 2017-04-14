@@ -21,12 +21,11 @@
 
 
 		<!-- <mapping resource="hibernate/clase.hbm.xml" /> -->
-				<!-- -->
+				<!-- 	<mapping resource="passenger.hbm.xml" />  -->
+				<!--	<mapping resource="driver.hbm.xml" /> -->
 	
 		<mapping resource="trip.hbm.xml" /> 
-		<mapping resource="score.hbm.xml" /> 
-		<mapping resource="passenger.hbm.xml" /> 
-		<mapping resource="driver.hbm.xml" />
+		<mapping resource="score.hbm.xml" /> 		
 		<mapping resource="user.hbm.xml" /> 
 
 	</session-factory>

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class Driver extends User {
-	private Long idDriver;
 	private Collection<Trip> trips;
 	private Date licenseDate;
 	
@@ -19,12 +18,7 @@ public class Driver extends User {
 	public void setTrips(Collection<Trip> trips) {
 		this.trips = trips;
 	}
-	public Long getIdDriver() {
-		return idDriver;
-	}
-	public void setIdDriver(Long idDriver) {
-		this.idDriver = idDriver;
-	}
+
 	public Date getLicenseDate() {
 		return licenseDate;
 	}

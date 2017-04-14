@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC 
-"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+<!DOCTYPE hibernate-mapping PUBLIC "-
+//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="model">
@@ -8,6 +8,12 @@
 		<id name="idTrip" column="ID_TRIP">
 			<generator class="native"/>
 		</id>
+		<property name="from" column="FROM" type="string" />
+		<property name="to" column="TO" type="string" />
+		<property name="price" column="PRICE" type="float" />
+		<property name="maxPassenger" column="MAX_PASSENGER" type="integer" />
+		<property name="state" column="STATE" type="string" />
+		<property name="date" column="DATE" type="date" />
 		
 		<!-- 	Muchos trips pertenecen a un driver.  -->
 		<many-to-one name="driver" column="ID_USER" not-null="true" cascade="all" />
@@ -25,12 +31,7 @@
 			not-null="true"/>
 			<one-to-many class="Score" />
 		</set>
-		<property name="from" column="FROM" type="string" />
-		<property name="to" column="TO" type="string"/>
-		<property name="price" column="PRICE" type="double"/>
-		<property name="date" column="DATE" type="timestap" />
-		<property name="maxPassenger" column="MAX_PASSENGER" type="integer"/>
-		<property name="state" column="STATE" type="string" />
+		
 	</class>
 </hibernate-mapping>
 

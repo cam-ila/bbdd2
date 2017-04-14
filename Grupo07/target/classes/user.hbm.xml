@@ -13,11 +13,18 @@
 		<property name="password" column="PASSWORD" type="string" not-null="true"/>
 		
 		<union-subclass name="Driver" table="DRIVER">
-			<property name="licenseDate" />
+			<property name="licenseDate" column="LICENSE_DATE" type="timestamp" />
 			<set name="trips" cascade="all" inverse="true">	<!-- el inverse lo hace bidireccional -->
 				<key column="ID_USER" not-null="true"/>
 				<one-to-many class="Trip" />
 			</set>
+		<set name="scores" 
+			 cascade="all"
+			 inverse="true">
+			<key column="ID_PASSENGER"
+			not-null="true"/>
+			<one-to-many class="Score" />
+		</set>
 		</union-subclass>
 		
 		<union-subclass name="Passenger" table="PASSENGER">

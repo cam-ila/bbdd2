@@ -19,7 +19,9 @@ public class Main {
 		System.out.println("Generating schema.........");
 		new SchemaExport(cfg).create(true, true);
 		System.out.println("DONE.");
-
+		
+		
+		
 		System.out.println("Building sessions.........");
 		
 		SessionFactory sf = cfg.buildSessionFactory();
