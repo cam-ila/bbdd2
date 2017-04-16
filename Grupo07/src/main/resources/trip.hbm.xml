@@ -14,6 +14,8 @@
 		<property name="maxPassenger" column="MAX_PASSENGER" type="integer" />
 		<property name="state" column="STATE" type="true_false" />
 		<property name="price" column="PRICE" type="double" />
+		<property name="origin" column="ORIGIN" type="string" />
+		<property name="destination" column="DESTINATION" type="string" />
 		
 <!-- 	Muchos trips pertenecen a un driver.  -->
 		

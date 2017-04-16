@@ -30,12 +30,12 @@ public class Driver extends User {
 	public void setLicenseDate(Date date) {
 		this.licenseDate = date;
 	}
-	public void createAndAddTrip(String from, String to, Date date, Integer maxPassenger, double price){
-		Trip trip = new Trip(this,from,to,date,maxPassenger, price);
+	public void createAndAddTrip(String origin, String destination, Date date, Integer maxPassenger, double price){
+		Trip trip = new Trip(this, date, maxPassenger, price, origin, destination);
 		this.trips.add(trip);
 	}
 	public void endTrip(Trip trip){
-		trip.setState(false);
+		trip.close();
 //		false significa que el viaje esta cerrado
 	}
 	public float averageScore(){

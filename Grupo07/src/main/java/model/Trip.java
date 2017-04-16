@@ -12,12 +12,12 @@ public class Trip {
 	private Collection<Passenger> passengers;
 	private Collection<Score> scores;
 	private Driver driver;
-	private String from;
-	private String to;
 	private Date date;
 	private Integer maxPassenger;
 	private Boolean state;
 	private double price;
+	private String origin;
+	private String destination;
 	
 	public Trip(){
 		this.passengers = new HashSet<Passenger>();
@@ -25,14 +25,14 @@ public class Trip {
 		this.state = true;
 	}
 	
-	public Trip(Driver driver, String from, String to, Date date,Integer maxPassenger, double price){
+	public Trip(Driver driver, Date date,Integer maxPassenger, double price, String origin, String destination){
 		this.driver = driver;
-		this.from = from;
-		this.to = to;
 		this.date = date;
 		this.maxPassenger = maxPassenger;
 		this.state = true;
 		this.price = price;
+		this.origin = origin;
+		this.destination = destination;
 		this.passengers = new HashSet<Passenger>();
 		this.scores = new HashSet<Score>();
 	}
@@ -79,22 +79,6 @@ public class Trip {
 	
 	public void setDriver(Driver driver) {
 		this.driver = driver;
-	}
-	
-	public String getFrom() {
-		return from;
-	}
-	
-	public void setFrom(String from) {
-		this.from = from;
-	}
-	
-	public String getTo() {
-		return to;
-	}
-	
-	public void setTo(String to) {
-		this.to = to;
 	}
 	
 	public Date getDate() {
@@ -148,6 +132,22 @@ public class Trip {
 		    Passenger elem = iter.next();
 		    elem.lessCredit(amount);
 		}
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 	
 	

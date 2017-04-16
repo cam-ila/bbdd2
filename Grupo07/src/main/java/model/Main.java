@@ -38,10 +38,11 @@ public class Main {
 		Passenger thirdPassenger = new Passenger("Margarita", "m4rg4r1t4", 1500);
 		
 		Trip aTrip = new Trip();
-		aTrip.setState(true);
-		aTrip.setPrice(900);
-		
-		aTrip.setMaxPassenger(10);
+		aTrip.setPrice(900);		
+		aTrip.setDate(aDate);
+		aTrip.setMaxPassenger(5);
+		aTrip.setOrigin("La plata");
+		aTrip.setDestination("Tres Arrollos");
 		aTrip.setDriver(aDriver);
 		aTrip.addPassenger(firstPassenger);
 		aTrip.addPassenger(secPassenger);
