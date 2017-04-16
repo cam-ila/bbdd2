@@ -8,17 +8,16 @@
 		<id name="idScore" column="ID_SCORE">
 			<generator class="native"/>
 		</id>
-		<property name="score" />
+		<property name="score" column="SCORE" type="integer" />
+		<property name="description" column="DESCRIPTION" type="string" />
 <!-- 	Muchos Scores para un pasajero -->
 		 <many-to-one name="passenger"
 			column="ID_USER"
-			unique="true"
 			not-null="true"
 			cascade="all" />
 <!-- 	Muchos Scores para un trip -->
 		<many-to-one name="trip"
 			column="ID_TRIP"
-			unique="true"
 			not-null="true"
 			cascade="all" />
 	</class>

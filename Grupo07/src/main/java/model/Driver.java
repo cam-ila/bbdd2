@@ -10,6 +10,11 @@ public class Driver extends User {
 	
 	public Driver() {
 	}
+	
+	public Driver(String fullName, String password, Date licenseDate){
+		super(fullName, password);
+		this.licenseDate = licenseDate;
+	}
 
 	public Collection<Trip> getTrips() {
 		return trips;
@@ -25,12 +30,12 @@ public class Driver extends User {
 	public void setLicenseDate(Date date) {
 		this.licenseDate = date;
 	}
-	public void createAndAddTrip(String from, String to, Date date, Integer maxPassenger, String state, double price){
-		Trip trip = new Trip(this,from,to,date,maxPassenger, state, price);
+	public void createAndAddTrip(String from, String to, Date date, Integer maxPassenger, double price){
+		Trip trip = new Trip(this,from,to,date,maxPassenger, price);
 		this.trips.add(trip);
 	}
 	public void endTrip(Trip trip){
-		trip.setState("false");
+		trip.setState(false);
 //		false significa que el viaje esta cerrado
 	}
 	public float averageScore(){
