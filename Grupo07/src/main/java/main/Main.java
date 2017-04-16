@@ -1,4 +1,4 @@
-package model;
+package main;
 
 import java.util.Date;
 
@@ -8,25 +8,22 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
+import model.Driver;
+import model.Passenger;
+import model.Score;
+import model.Trip;
+
 public class Main {
 
 	public static void main(String[] args) {
 		
-		System.out.println("----------------------- Setting up Hibernate -----------------------");
+	
 		Configuration cfg = new Configuration();
-		cfg.configure("hibernate.cfg.xml");
-		
-		System.out.println("Droping schema.........");
+		cfg.configure("hibernate.cfg.xml");		
+	
 		new SchemaExport(cfg).drop(true, true);
-		System.out.println("DONE.");
 		
-		System.out.println("Generating schema.........");
 		new SchemaExport(cfg).create(true, true);
-		System.out.println("DONE.");
-		
-		
-		
-		System.out.println("Building sessions.........");
 		
 		SessionFactory sf = cfg.buildSessionFactory();
 		
@@ -62,14 +59,17 @@ public class Main {
 		
 		Session session = sf.openSession();
 		
-
-		Transaction tx = session.beginTransaction();
-		session.persist(aTrip);
-		
-	
-		tx.commit();
-		session.clear();
-		session.close();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			session.save(aTrip);
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			session.close();
+		}		
+		session.disconnect();
 	}
 
 }
