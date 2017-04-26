@@ -1,6 +1,6 @@
-package model;
+package bd2.Muber.model;
 
-import model.Trip;
+import bd2.Muber.model.Trip;
 
 public class Score {
 	private Trip trip;

@@ -1,11 +1,11 @@
-package model;
+package bd2.Muber.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import model.Trip;
-import model.Passenger;
+import bd2.Muber.model.Trip;
+import bd2.Muber.model.Passenger;
 
 public class Muber {
 	

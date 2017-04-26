@@ -1,11 +1,11 @@
-package model;
+package bd2.Muber.model;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
-import model.Trip;
-import model.User;
+import bd2.Muber.model.Trip;
+import bd2.Muber.model.User;
 
 public class Driver extends User {
 	private Collection<Trip> trips;

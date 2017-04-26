@@ -1,11 +1,11 @@
-package model;
+package bd2.Muber.model;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-import model.Score;
-import model.Trip;
-import model.User;
+import bd2.Muber.model.Score;
+import bd2.Muber.model.Trip;
+import bd2.Muber.model.User;
 
 public class Passenger extends User{
 	
