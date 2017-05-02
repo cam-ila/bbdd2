@@ -1,0 +1,19 @@
+package model;
+
+import java.util.Collection;
+import java.util.Date;
+
+public class Trip {
+
+	private Collection<Passenger> passengers;
+	private Driver driver;
+	private String from;
+	private String to;
+	private Date date;
+	private Integer maxPassenger;
+	private Boolean state;
+	
+	
+	
+}
+

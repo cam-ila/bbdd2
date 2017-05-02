@@ -1,0 +1,5 @@
+1492364766755	Encapsulate field 'state'
+1492369768255	Encapsulate field 'origin'
+1492369794525	Encapsulate field 'destination'
+1492380366607	Move compilation unit
+1492381849618	Move 'pom.xml' to 'target'

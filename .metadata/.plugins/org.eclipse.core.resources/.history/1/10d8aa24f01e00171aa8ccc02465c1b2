@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-
+//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate
+-mapping-3.0.dtd">
+
+<hibernate-mapping package=“prueba">
+<class name=“Persona" table=“PERSONA">
+<id name=“IdPersona" column="ID_PERSONA">
+<generator class="native"/>
+</id>
+<property name="nombre“ not-null=“true”/>
+<property name=“fechaNacimiento"/>
+</class>
+</hibernate-mapping>
