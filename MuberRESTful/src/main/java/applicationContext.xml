@@ -12,7 +12,7 @@
 
 
 
-	 <import resource="classpath:hibernate.cfg.xml" />
+	 <!--<import resource="classpath:hibernate.cfg.xml" />-->
 	<!--<import resource="hibernate/hibernate.cfg.xml" />-->
 	
 

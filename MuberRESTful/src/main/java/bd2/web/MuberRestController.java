@@ -40,4 +40,11 @@ public class MuberRestController {
 		aMap.put("result", "OK");
 		return new Gson().toJson(aMap);
 	}
+	
+	@RequestMapping(value = "/pasajeros", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
+	public String getPasajeros() {
+		Map<String, Object> aMap = new HashMap<String, Object>();
+		aMap.put("result", "OK");
+		return new Gson().toJson(aMap);
+	}
 }
