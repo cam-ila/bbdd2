@@ -1,9 +1,0 @@
-<hibernate-mapping package=“prueba">
-<class name=“Persona" table=“PERSONA">
-<id name=“IdPersona" column="ID_PERSONA">
-<generator class="native"/>
-</id>
-<property name="nombre“ not-null=“true”/>
-<property name=“fechaNacimiento"/>
-</class>
-</hibernate-mapping>

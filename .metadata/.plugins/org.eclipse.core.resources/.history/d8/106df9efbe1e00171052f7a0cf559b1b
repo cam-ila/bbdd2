@@ -1,9 +1,0 @@
-<hibernate-mapping package=“model">
-	<class name=“User" table=“USER">
-		<id name=“idUser" column="ID_USER">
-			<generator class="native"/>
-		</id>
-	<property name="nombre“ not-null=“true”/>
-	<property name=“fechaNacimiento"/>
-	</class>
-</hibernate-mapping>
