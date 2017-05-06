@@ -33,6 +33,8 @@ public class Main {
 		Passenger firstPassenger = new Passenger("German", "german 123", 1500);
 		Passenger secPassenger = new Passenger("Alicia", "al1c1a", 1500);
 		Passenger thirdPassenger = new Passenger("Margarita", "m4rg4r1t4", 1500);
+		Passenger four = new Passenger("cuatro", "cu23i32", 1500);
+		Passenger five = new Passenger("cinco", "c1nc0", 1500);
 		
 		Trip aTrip = new Trip();
 		aTrip.setPrice(900);		
@@ -63,6 +65,8 @@ public class Main {
 		try {
 			tx = session.beginTransaction();
 			session.save(aTrip);
+			session.save(four);
+			session.save(five);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)
