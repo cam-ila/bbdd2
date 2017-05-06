@@ -166,6 +166,22 @@ public class MuberRestController {
 		session.disconnect();
 		
 	}
+	//TODO: todo a la mitad. esto no anda porque dice que esta duplicada la session. Entra por la exception por eso no tiera error
+		private void saveTrip(Trip aTrip){
+			Session session = getSession();
+			
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				session.save(aTrip);
+				tx.commit();
+			} catch (Exception e) {
+				if (tx != null)
+					tx.rollback();
+				}		
+			session.disconnect();
+			
+		}
 	
 	
 	
@@ -265,14 +281,16 @@ public class MuberRestController {
 		aMap.put("v costoTotal", aTrip.getPrice());
 		aMap.put("v cantidadPasajeros", aTrip.getMaxPassenger());
 		aMap.put("v date", aTrip.getDate());
+		
+		saveTrip(aTrip); //idem no lo guarda.
 		return new Gson().toJson(aMap);	
-		//TODO:Crear un viaje implica guardarlo, no?, hacer un session.save en algun lugar. no aca :)
+		//TODO:Arreglar el saveTrip pa que ande
 	}
 	// curl -d "costoTotal=10&cantidadPasajeros=5&origen=pepe&destino=sarasa&conductorId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo
 
 	
-	
-	//Agregar un pasajero a un viaje ya creado
+	//TODO: HACERLO
+	//Agregar un pasajero a un viaje ya creado. 
 	//Este servicio recibe los siguientes parámetros: viajeId, pasajeroId
 	@RequestMapping(
 			value = "/viajes/agregarPasajero", 
@@ -351,7 +369,7 @@ public class MuberRestController {
 	
 	public String conductoresTop10() {
 		Map<Long, Object> aMap = new HashMap<Long, Object>();		
-		List<Driver> driverList = getDriversTopTen();
+		List<Driver> driverList = getDriversTopTen(); //HACER LA CONSULTA DEL TOP TEN
 		for (Driver d : driverList){ 
 			aMap.put(d.getIdUser(), d.getFullName());
 		}
