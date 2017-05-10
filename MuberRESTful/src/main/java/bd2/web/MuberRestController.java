@@ -38,13 +38,12 @@ public class MuberRestController {
 		cfg.configure("hibernate.cfg.xml");
 		SessionFactory factory = cfg.buildSessionFactory();
 		Session session = factory.openSession();
-
 		return session;
 	}
 	private void endSession(Session session){	
 	       // session.getTransaction().commit();
-	       // session.close();
 	    	session.disconnect();
+	    	session.close();
 	}
 	/* Lista al pasajero id=2 y anda
 	private List sarasa(){
@@ -88,6 +87,18 @@ public class MuberRestController {
 		Session session = getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
+		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=false ";
+		Query query = session.createQuery(hql);
+		List<Trip> result = query.list();
+		tx.commit();
+		endSession(session);	
+		return result;
+	}
+	
+	private List<Trip> getOpenedTrips(){
+		Session session = getSession();	
+		Transaction tx = null;
+		tx = session.beginTransaction();
 		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=true ";
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();
@@ -105,7 +116,7 @@ public class MuberRestController {
 		query.setParameter(0, id);
 		List<Driver> result = query.list();
 		tx.commit();
-		endSession(session);	
+		endSession(session);
 		return result;
 	}
 	
@@ -168,6 +179,7 @@ public class MuberRestController {
 	}
 	//TODO: todo a la mitad. esto no anda porque dice que esta duplicada la session. Entra por la exception por eso no tiera error
 		private void saveTrip(Trip aTrip){
+			
 			Session session = getSession();
 			
 			Transaction tx = null;
@@ -178,11 +190,16 @@ public class MuberRestController {
 			} catch (Exception e) {
 				if (tx != null)
 					tx.rollback();
-				}		
+					System.out.println ("Entro por la excepcion");
+				}
 			session.disconnect();
+			session.close();
 			
 		}
-	
+		
+		private void updateTrip(Long idTrip, Passenger passenger){
+			passenger.
+		}
 	
 	
 	//Listar todos los pasajeros registrados en Muber
@@ -208,7 +225,7 @@ public class MuberRestController {
 	}
 	
 	//Listar todos los viajes abiertos en Muber
-	//TODO:Hacer bien el JSON
+	//TODO:Hacer bien el JSON (Que tiene mal? mustra eso en pantalla al menos)
 	@RequestMapping(value = "/abiertos", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String abiertos() {
 		Map<Long, Object> aMap = new HashMap<Long, Object>();		
@@ -216,33 +233,49 @@ public class MuberRestController {
 		for (Trip t : tripsList){ 
 			aMap.put(t.getIdTrip(), t.getDriver().getFullName());
 		}
-		return new Gson().toJson(aMap);		
+		return new Gson().toJson(aMap);
 	}
 	
 	//Obtener la información de un conductor (nombre de usuario, viajes realizados, puntaje promedio y fecha de licencia)
 	//TODO:Crear bien la url, tiene que ser con "/detalles?conductorId=1" creo... preguntarlo
+	// curl -X GET http://localhost:8080/MuberRESTful/rest/services/conductores/detalles?conductorId=1 (poner el id a buscar)
 	//TODO:Cuando creemos bien el json de los viajes, usarlo aca
-	@RequestMapping(value = "/conductores/detalles/{conductorId}",  method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
-	public String conductoresDetalles(@PathVariable(value="conductorId") Long conductorId) {
+	@RequestMapping(
+			value = "/conductores/detalles{conductorId}",  
+			method = RequestMethod.GET, 
+			produces = "application/json", 
+			headers = "Accept=application/json"
+			)
+	
+	public String conductoresDetalles(
+			//@PathVariable(value="conductorId") Long conductorId) 
+			@RequestParam("conductorId") Long conductorId
+			) {
 
-		Map<String, Object> aMap = new HashMap<String, Object>();		
+		Map<String, Object> aMap = new HashMap<String, Object>();
+		Map<String, Object> tripMap = new HashMap<String, Object>();
 		List<Driver> driverList = getDriver(conductorId);
 		for (Driver d : driverList){ 
 			aMap.put("Nombre", d.getFullName());
 			//Itera por cada viaje para listar los viajes realizado
 			for (Trip t : d.getTrips()){ 
-				aMap.put(t.getIdTrip().toString(), t.getDate());
+				tripMap.put(t.getIdTrip().toString(), t.getDate());
 			}
+			aMap.put("trips", tripMap);
 			aMap.put("Puntaje promedio", d.averageScore());
 			aMap.put("Fecha de licencia", d.getLicenseDate());
 			
 		}
+		
 		return new Gson().toJson(aMap);		
 	}
 	
 	
 	//Crear un viaje
 	//Este servicio recibe los siguientes parámetros: origen, destino, conductorId,	costoTotal, cantidadPasajeros
+	
+	// curl -d "origen=La Plata&destino=Capital&conductorId=1&costoTotal=300&cantidadPasajeros=3" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo
+	
 	@RequestMapping(
 			value = "/viajes/nuevo", 
 			method = RequestMethod.POST, 
@@ -258,7 +291,8 @@ public class MuberRestController {
 			@RequestParam("cantidadPasajeros") Integer maxPassenger
 			) {
 		
-		Map<String, Object> aMap = new HashMap<String, Object>();	
+		Map<String, Object> aMap0 = new HashMap<String, Object>();
+		Map<String, Object> aMap = new HashMap<String, Object>();
 		
 		//Verifico lo que me llega por parametro
 		aMap.put("Origen", origin );
@@ -266,7 +300,7 @@ public class MuberRestController {
 		aMap.put("conductorId", idDriver );
 		aMap.put("costoTotal", price );
 		aMap.put("cantidadPasajeros", maxPassenger );
-		
+		aMap0.put("Valores del nuevo Viaje", aMap);
 		
 		Date date = new Date();
 		
@@ -275,43 +309,47 @@ public class MuberRestController {
 		Driver driver = getDriver(idDriver).get(0);
 		Trip aTrip = new Trip(driver, date, maxPassenger, price, origin, destination);
 		//Imprimo giladas, 
-		aMap.put("v Origen", aTrip.getOrigin());
-		aMap.put("v Destino", aTrip.getDestination());
-		aMap.put("v conductorId", aTrip.getDriver().getFullName());
-		aMap.put("v costoTotal", aTrip.getPrice());
-		aMap.put("v cantidadPasajeros", aTrip.getMaxPassenger());
-		aMap.put("v date", aTrip.getDate());
+//		aMap.put("v Origen", aTrip.getOrigin());
+//		aMap.put("v Destino", aTrip.getDestination());
+//		aMap.put("v conductorId", aTrip.getDriver().getFullName());
+//		aMap.put("v costoTotal", aTrip.getPrice());
+//		aMap.put("v cantidadPasajeros", aTrip.getMaxPassenger());
+//		aMap.put("v date", aTrip.getDate());
 		
-		saveTrip(aTrip); //idem no lo guarda.
-		return new Gson().toJson(aMap);	
-		//TODO:Arreglar el saveTrip pa que ande
+		saveTrip(aTrip); 
+		return new Gson().toJson(aMap0);
 	}
-	// curl -d "costoTotal=10&cantidadPasajeros=5&origen=pepe&destino=sarasa&conductorId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo
-
 	
 	//TODO: HACERLO
 	//Agregar un pasajero a un viaje ya creado. 
 	//Este servicio recibe los siguientes parámetros: viajeId, pasajeroId
+	// curl -X PUT -d "pasajeroId=5&viajeId=2" http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero
+	// curl --header "Content-Type: application/json" --request PUT --data '{"viajeId":"2","pasajeroId":"5"}' http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero
 	@RequestMapping(
 			value = "/viajes/agregarPasajero", 
-			method = RequestMethod.PUT, 
+			method = RequestMethod.POST, 
 			produces = "application/json", 
 			headers = "Accept=application/json"
 			)
 	
 	public String viajesAgregarPasajeros(
-		//	@RequestParam("viajeId") Integer idTrip, //put no usa @RequestParam
-			//@RequestParam("pasajeroId") Integer idPassenger
+		@RequestParam("viajeId") Long idTrip, //put no usa @RequestParam (quien te dijo?)
+		@RequestParam("pasajeroId") Long idPassenger
 			) {
-		
+		Map<String, Object> aMap0 = new HashMap<String, Object>();		
 		Map<String, Object> aMap = new HashMap<String, Object>();
-		aMap.put("viajeId", "hola");
-	//	aMap.put("viajeId", idTrip);
-	//	aMap.put("pasejeroId", idPassenger);
-		return new Gson().toJson(aMap);		
+		aMap.put("viajeId", idTrip);
+		aMap.put("pasejeroId", idPassenger);
+		Passenger aPassenger = getPassenger(idPassenger);
+		Trip aTrip = getTrip(idTrip);
+		if(aPassenger.singUpForTrip(aTrip)){
+			//update en base (no estoy seguro como)
+			aMap0.put("pasajero agregado a viaje", aMap);			
+		}else{
+			aMap0.put("no hay lugar para el viaje", aMap);			
+		}
+		return new Gson().toJson(aMap0);		
 	}
-	// http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero
-	//Usa put y es otro mambo aparte
 	
 	
 	
