@@ -46,6 +46,7 @@ public class Main {
 		aTrip.addPassenger(firstPassenger);
 		aTrip.addPassenger(secPassenger);
 		aTrip.addPassenger(thirdPassenger);
+		aTrip.addPassenger(four);
 		
 		Score fps = new Score(aTrip, firstPassenger, 5, "Genial");
 		aTrip.addScore(fps);
@@ -58,6 +59,16 @@ public class Main {
 
 		aTrip.close();
 		
+		Trip dos = new Trip();
+		dos.setPrice(900);		
+		dos.setDate(aDate);
+		dos.setMaxPassenger(5);
+		dos.setOrigin("batata");
+		dos.setDestination("sarasa");
+		dos.setDriver(aDriver);
+		
+		Driver otroDriver = new Driver("Juan", "Perez", aDate);
+		
 		
 		Session session = sf.openSession();
 		
@@ -67,6 +78,8 @@ public class Main {
 			session.save(aTrip);
 			session.save(four);
 			session.save(five);
+			session.save(dos);
+			session.save(otroDriver);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)

@@ -45,19 +45,6 @@ public class MuberRestController {
 	    	session.disconnect();
 	    	session.close();
 	}
-	/* Lista al pasajero id=2 y anda
-	private List sarasa(){
-		Session session = getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "SELECT P.fullName FROM bd2.Muber.model.Passenger P WHERE P.id=2";
-		Query query = session.createQuery(hql);
-		List result = query.list();
-		tx.commit();
-		endSession(session);	
-		return result;
-	}
-	*/	
 
 	private List<Passenger> getPassengers(){
 		Session session = getSession();	
@@ -91,7 +78,7 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();
 		tx.commit();
-		endSession(session);	
+	//	endSession(session);	
 		return result;
 	}
 	
@@ -103,20 +90,20 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();
 		tx.commit();
-		endSession(session);	
+	//	endSession(session);	
 		return result;
 	}
 
-	private List<Driver> getDriver(Long id){
+	private Driver getDriver(Long id){
 		Session session = getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
 		String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, id);
-		List<Driver> result = query.list();
+		Driver result =(Driver) query.uniqueResult();
 		tx.commit();
-		endSession(session);
+		//endSession(session);
 		return result;
 	}
 	
@@ -127,11 +114,11 @@ public class MuberRestController {
 		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, id);
-		List<Passenger> result = query.list();
+		Passenger result = (Passenger) query.uniqueResult();
 		tx.commit();
 		endSession(session);
-		return result.get(0);
-	} //TODO: ver lo de get(0) tiene que haber una forma de que me devuelva un solo elemento, o que eso si esta vcacio no tiere error
+		return result;
+	} //TODO: ver eso si esta vacio no tire error
 	
 	private Trip getTrip(Long id){
 		Session session = getSession();	
@@ -140,10 +127,10 @@ public class MuberRestController {
 		String hql = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, id);
-		List<Trip> result = query.list();
+		Trip result = (Trip) query.uniqueResult();
 		tx.commit();
-		endSession(session);
-		return result.get(0);
+	//	endSession(session);
+		return result;
 	} //TODO: ver lo de get(0) tiene que haber una forma de que me devuelva un solo elemento, o que eso si esta vcacio no tiere error
 	
 	//TODO: hacer la consulta magica que haga todo lo que pide, es con consulta no?
@@ -161,45 +148,63 @@ public class MuberRestController {
 		return result;
 	}
 	
-	//TODO: todo a la mitad. esto no anda porque dice que esta duplicada la session. Entra por la exception por eso no tiera error
-	private void saveScore(Score aScore){
+	
+	private void saveScore(Long idTrip, Long idPassenger,Integer score, String description){
 		Session session = getSession();
 		
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
+			
+			
+			String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+			Query query = session.createQuery(hql);
+			query.setParameter(0, idPassenger);
+			Passenger aPassenger = (Passenger) query.uniqueResult();
+			 
+			
+			String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+			Query query1 = session.createQuery(hql1);
+			query1.setParameter(0, idTrip);
+			Trip aTrip = (Trip) query1.uniqueResult();
+			Score aScore = new Score(aTrip, aPassenger, score, description);
+			
 			session.save(aScore);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
-			}		
+		}		
 		session.disconnect();
 		
 	}
-	//TODO: todo a la mitad. esto no anda porque dice que esta duplicada la session. Entra por la exception por eso no tiera error
-		private void saveTrip(Trip aTrip){
-			
-			Session session = getSession();
-			
-			Transaction tx = null;
-			try {
-				tx = session.beginTransaction();
-				session.save(aTrip);
-				tx.commit();
-			} catch (Exception e) {
-				if (tx != null)
-					tx.rollback();
-					System.out.println ("Entro por la excepcion");
-				}
-			session.disconnect();
-			session.close();
-			
+	
+	private void saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
+		Session session = getSession();
+
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
+			Query query = session.createQuery(hql);
+			query.setParameter(0, idDriver);
+			Driver result =(Driver) query.uniqueResult();
+			Trip aTrip = new Trip(result, date, maxPassenger, price, origin, destination);
+			session.save(aTrip);
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			System.out.println ("Entro por la excepcion");
 		}
-		
-		private void updateTrip(Long idTrip, Passenger passenger){
-			passenger.
-		}
+		session.disconnect();
+		session.close();
+
+	}
+
+		//private void updateTrip(Long idTrip, Passenger passenger){
+			//passenger.
+		//}
 	
 	
 	//Listar todos los pasajeros registrados en Muber
@@ -225,11 +230,10 @@ public class MuberRestController {
 	}
 	
 	//Listar todos los viajes abiertos en Muber
-	//TODO:Hacer bien el JSON (Que tiene mal? mustra eso en pantalla al menos)
 	@RequestMapping(value = "/abiertos", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String abiertos() {
 		Map<Long, Object> aMap = new HashMap<Long, Object>();		
-		List<Trip> tripsList = getClosedTrips();
+		List<Trip> tripsList = getOpenedTrips();
 		for (Trip t : tripsList){ 
 			aMap.put(t.getIdTrip(), t.getDriver().getFullName());
 		}
@@ -237,9 +241,9 @@ public class MuberRestController {
 	}
 	
 	//Obtener la información de un conductor (nombre de usuario, viajes realizados, puntaje promedio y fecha de licencia)
-	//TODO:Crear bien la url, tiene que ser con "/detalles?conductorId=1" creo... preguntarlo
-	// curl -X GET http://localhost:8080/MuberRESTful/rest/services/conductores/detalles?conductorId=1 (poner el id a buscar)
-	//TODO:Cuando creemos bien el json de los viajes, usarlo aca
+	//  $ curl -G -d "conductorId=1" http://localhost:8080/MuberRESTful/rest/services/conductores/detalles
+
+	
 	@RequestMapping(
 			value = "/conductores/detalles{conductorId}",  
 			method = RequestMethod.GET, 
@@ -248,14 +252,13 @@ public class MuberRestController {
 			)
 	
 	public String conductoresDetalles(
-			//@PathVariable(value="conductorId") Long conductorId) 
 			@RequestParam("conductorId") Long conductorId
 			) {
 
 		Map<String, Object> aMap = new HashMap<String, Object>();
 		Map<String, Object> tripMap = new HashMap<String, Object>();
-		List<Driver> driverList = getDriver(conductorId);
-		for (Driver d : driverList){ 
+		Driver d = getDriver(conductorId);
+		
 			aMap.put("Nombre", d.getFullName());
 			//Itera por cada viaje para listar los viajes realizado
 			for (Trip t : d.getTrips()){ 
@@ -265,17 +268,14 @@ public class MuberRestController {
 			aMap.put("Puntaje promedio", d.averageScore());
 			aMap.put("Fecha de licencia", d.getLicenseDate());
 			
-		}
+		
 		
 		return new Gson().toJson(aMap);		
 	}
 	
 	
-	//Crear un viaje
-	//Este servicio recibe los siguientes parámetros: origen, destino, conductorId,	costoTotal, cantidadPasajeros
-	
-	// curl -d "origen=La Plata&destino=Capital&conductorId=1&costoTotal=300&cantidadPasajeros=3" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo
-	
+	//Crear un viaje ->  recibe los siguientes parámetros: origen, destino, conductorId,	costoTotal, cantidadPasajeros
+	// curl -d "origen=La Plata&destino=Capital&conductorId=1&costoTotal=300&cantidadPasajeros=3" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo	
 	@RequestMapping(
 			value = "/viajes/nuevo", 
 			method = RequestMethod.POST, 
@@ -306,8 +306,8 @@ public class MuberRestController {
 		
 		//TODO: Arreglar, Si el driver con ese id no existe, new trip, va a qeurer guardar un null y Error!!!!!!!!!!!!
 		//uso el metodo de /conductores. 
-		Driver driver = getDriver(idDriver).get(0);
-		Trip aTrip = new Trip(driver, date, maxPassenger, price, origin, destination);
+		//Driver driver = getDriver(idDriver);
+		//Trip aTrip = new Trip(driver, date, maxPassenger, price, origin, destination);
 		//Imprimo giladas, 
 //		aMap.put("v Origen", aTrip.getOrigin());
 //		aMap.put("v Destino", aTrip.getDestination());
@@ -316,7 +316,7 @@ public class MuberRestController {
 //		aMap.put("v cantidadPasajeros", aTrip.getMaxPassenger());
 //		aMap.put("v date", aTrip.getDate());
 		
-		saveTrip(aTrip); 
+		saveTrip(idDriver, date, maxPassenger, price, origin, destination); 
 		return new Gson().toJson(aMap0);
 	}
 	
@@ -333,7 +333,7 @@ public class MuberRestController {
 			)
 	
 	public String viajesAgregarPasajeros(
-		@RequestParam("viajeId") Long idTrip, //put no usa @RequestParam (quien te dijo?)
+		@RequestParam("viajeId") Long idTrip, 
 		@RequestParam("pasajeroId") Long idPassenger
 			) {
 		Map<String, Object> aMap0 = new HashMap<String, Object>();		
@@ -342,6 +342,7 @@ public class MuberRestController {
 		aMap.put("pasejeroId", idPassenger);
 		Passenger aPassenger = getPassenger(idPassenger);
 		Trip aTrip = getTrip(idTrip);
+	//	aMap.put("six", aTrip.getPassengers().size());
 		if(aPassenger.singUpForTrip(aTrip)){
 			//update en base (no estoy seguro como)
 			aMap0.put("pasajero agregado a viaje", aMap);			
@@ -375,16 +376,14 @@ public class MuberRestController {
 	
 		Map<String, Object> aMap = new HashMap<String, Object>();
 
-		Passenger passenger = getPassenger(idPassenger);
-		Trip trip = getTrip(idTrip);
-		Score aScore = new Score(trip, passenger, score, description);
+	/*
 		
 		aMap.put("viajeId", aScore.getIdScore());
 		aMap.put("pasajeroId", aScore.getPassenger().getIdUser());
 		aMap.put("puntaje", aScore.getScore());
 		aMap.put("comentario", aScore.getDescription());
-		
-		saveScore(aScore); //no funca, no guarda. 
+		*/
+		saveScore(idTrip, idPassenger, score, description); //no funca, no guarda. 
 		return new Gson().toJson(aMap);		
 	}
 	// curl -d "viajeId=1&pasajeroId=5&puntaje=1&comentario='tara raea erjk'" http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
