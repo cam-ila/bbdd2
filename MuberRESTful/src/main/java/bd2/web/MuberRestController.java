@@ -149,7 +149,7 @@ public class MuberRestController {
 	}
 	
 	
-	private void saveScore(Long idTrip, Long idPassenger,Integer score, String description){
+	private Boolean saveScore(Long idTrip, Long idPassenger,Integer score, String description){
 		Session session = getSession();
 		
 		Transaction tx = null;
@@ -171,15 +171,18 @@ public class MuberRestController {
 			
 			session.save(aScore);
 			tx.commit();
+			session.disconnect();
+			return true;
 		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
+				session.disconnect();
+				return false;
 		}		
-		session.disconnect();
 		
 	}
 	
-	private void saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
+	private Boolean saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
 		Session session = getSession();
 
 		Transaction tx = null;
@@ -192,14 +195,18 @@ public class MuberRestController {
 			Trip aTrip = new Trip(result, date, maxPassenger, price, origin, destination);
 			session.save(aTrip);
 			tx.commit();
+			session.disconnect();
+			session.close();
+			return true;
 		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
-			System.out.println ("Entro por la excepcion");
+				session.disconnect();
+				session.close();
+				return false;
+		
 		}
-		session.disconnect();
-		session.close();
-
+		
 	}
 
 		//private void updateTrip(Long idTrip, Passenger passenger){
@@ -300,23 +307,17 @@ public class MuberRestController {
 		aMap.put("conductorId", idDriver );
 		aMap.put("costoTotal", price );
 		aMap.put("cantidadPasajeros", maxPassenger );
-		aMap0.put("Valores del nuevo Viaje", aMap);
 		
 		Date date = new Date();
 		
-		//TODO: Arreglar, Si el driver con ese id no existe, new trip, va a qeurer guardar un null y Error!!!!!!!!!!!!
-		//uso el metodo de /conductores. 
-		//Driver driver = getDriver(idDriver);
-		//Trip aTrip = new Trip(driver, date, maxPassenger, price, origin, destination);
-		//Imprimo giladas, 
-//		aMap.put("v Origen", aTrip.getOrigin());
-//		aMap.put("v Destino", aTrip.getDestination());
-//		aMap.put("v conductorId", aTrip.getDriver().getFullName());
-//		aMap.put("v costoTotal", aTrip.getPrice());
-//		aMap.put("v cantidadPasajeros", aTrip.getMaxPassenger());
-//		aMap.put("v date", aTrip.getDate());
+		if (saveTrip(idDriver, date, maxPassenger, price, origin, destination)) {
+			aMap.put("Se Agrego correctamente el viaje con destino", destination );
+		}
+		else {
+			aMap.put("No se pudo agregar el viaje con destino", destination );
+		}
+		aMap0.put("Valores del nuevo Viaje", aMap);
 		
-		saveTrip(idDriver, date, maxPassenger, price, origin, destination); 
 		return new Gson().toJson(aMap0);
 	}
 	
@@ -354,12 +355,8 @@ public class MuberRestController {
 	
 	
 	
-	/*
-	Crear una calificación de un pasajero para un viaje en particular
-	http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
-	Este servicio recibe los siguientes parámetros: viajeId, pasajeroId, puntaje, comentario
-	TODO: HACER QUE GUARDE A aScore EN LA BBDD. 
-	*/
+	
+	//Crear una calificación de un pasajero para un viaje en particular, recibe los siguientes parámetros: viajeId, pasajeroId, puntaje, comentario
 	@RequestMapping(
 			value = "/viajes/calificar", 
 			method = RequestMethod.POST, 
@@ -376,14 +373,14 @@ public class MuberRestController {
 	
 		Map<String, Object> aMap = new HashMap<String, Object>();
 
-	/*
+		if (saveScore(idTrip, idPassenger, score, description)) {
+			aMap.put("Se Agrego correctamente la calificacion al viaje", idTrip );
+		}
+		else {
+			aMap.put("No se puedo agregar la calificacion al viaje", idTrip );
+		}
+			
 		
-		aMap.put("viajeId", aScore.getIdScore());
-		aMap.put("pasajeroId", aScore.getPassenger().getIdUser());
-		aMap.put("puntaje", aScore.getScore());
-		aMap.put("comentario", aScore.getDescription());
-		*/
-		saveScore(idTrip, idPassenger, score, description); //no funca, no guarda. 
 		return new Gson().toJson(aMap);		
 	}
 	// curl -d "viajeId=1&pasajeroId=5&puntaje=1&comentario='tara raea erjk'" http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
