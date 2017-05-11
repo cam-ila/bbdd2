@@ -1,5 +1,7 @@
 package bd2.Muber.model;
 
+import java.util.Iterator;
+
 import bd2.Muber.model.Trip;
 
 public class Score {
@@ -15,10 +17,24 @@ public class Score {
 	}
 	
 	public Score(Trip trip, Passenger passenger, Integer score, String description){
+		Boolean noexiste = true;
+		if (trip.getPassengers().contains(passenger) && !trip.getState()){
+			Iterator<Score> itr = trip.getScores().iterator();
+			while(itr.hasNext()) {
+				Score aScore = itr.next();
+				if (aScore.passenger.equals(passenger)){
+					noexiste = false;
+				}
+			}
+			
+		}
+		if (noexiste) {
 		this.trip = trip;
 		this.passenger = passenger;
 		this.score = score;
 		this.description = description;
+		}
+
 	}
 	
 	public Trip getTrip() {

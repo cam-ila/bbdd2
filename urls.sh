@@ -28,4 +28,6 @@ echo -e "\n\n Viajes Abiertos:"
 
 curl http://localhost:8080/MuberRESTful/rest/services/abiertos
 
+echo -e "\n\n Top 10"
 
+curl http://localhost:8080/MuberRESTful/rest/services/conductores

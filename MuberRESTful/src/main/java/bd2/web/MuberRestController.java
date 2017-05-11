@@ -1,5 +1,9 @@
 package bd2.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -144,7 +148,7 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Driver> result = query.list();
 		tx.commit();
-		endSession(session);	
+		//endSession(session);	
 		return result;
 	}
 	
@@ -311,13 +315,12 @@ public class MuberRestController {
 		Date date = new Date();
 		
 		if (saveTrip(idDriver, date, maxPassenger, price, origin, destination)) {
-			aMap.put("Se Agrego correctamente el viaje con destino", destination );
+			aMap0.put("Se Agrego correctamente el viaje", aMap );
 		}
 		else {
-			aMap.put("No se pudo agregar el viaje con destino", destination );
+			aMap0.put("No se pudo agregar el viaje", aMap );
 		}
-		aMap0.put("Valores del nuevo Viaje", aMap);
-		
+				
 		return new Gson().toJson(aMap0);
 	}
 	
@@ -372,16 +375,22 @@ public class MuberRestController {
 			){
 	
 		Map<String, Object> aMap = new HashMap<String, Object>();
+		Map<String, Object> aMap0 = new HashMap<String, Object>();
+		
+		aMap.put("viaje Id", idTrip );
+		aMap.put("pasajeroId", idPassenger );
+		aMap.put("puntaje", score );
+		aMap.put("comentario", description );
 
 		if (saveScore(idTrip, idPassenger, score, description)) {
-			aMap.put("Se Agrego correctamente la calificacion al viaje", idTrip );
+			aMap0.put("Se Agrego correctamente la calificacion al viaje", aMap );
 		}
 		else {
-			aMap.put("No se puedo agregar la calificacion al viaje", idTrip );
+			aMap0.put("No se puedo agregar la calificacion al viaje", aMap );
 		}
 			
 		
-		return new Gson().toJson(aMap);		
+		return new Gson().toJson(aMap0);		
 	}
 	// curl -d "viajeId=1&pasajeroId=5&puntaje=1&comentario='tara raea erjk'" http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
 	
@@ -402,12 +411,32 @@ public class MuberRestController {
 			)
 	
 	public String conductoresTop10() {
-		Map<Long, Object> aMap = new HashMap<Long, Object>();		
+		Map<String, Object> aMap = new HashMap<String, Object>();
+		Map<Integer, Object> aMap0 = new HashMap<Integer, Object>();
 		List<Driver> driverList = getDriversTopTen(); //HACER LA CONSULTA DEL TOP TEN
+		
+		Collection<Driver> withAllTripClosed = new ArrayList<Driver>();
+		
 		for (Driver d : driverList){ 
-			aMap.put(d.getIdUser(), d.getFullName());
+			if (!d.haveOpenTrip()){
+				withAllTripClosed.add(d);			
+			}
 		}
-		return new Gson().toJson(aMap);		
+		List<Driver> list = new ArrayList<Driver >( withAllTripClosed );
+		Collections.sort( list, new Comparator<Driver>( ){
+			@Override
+			public int compare(Driver d1, Driver d2) {
+				return Float.compare(d1.averageScore(), d2.averageScore());
+			}		
+		} );
+		Integer i = 1;
+		for (Driver o: list){
+			aMap.put("Nombre", o.getFullName());	
+			aMap.put("Calificacion", o.averageScore());
+			aMap0.put(i, aMap);
+			i++;
+		}
+		return new Gson().toJson(aMap0);		
 	}
 
 

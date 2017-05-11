@@ -54,4 +54,14 @@ public class Driver extends User {
 		}
 		return average;
 	}
+	public boolean haveOpenTrip(){
+		for (Trip t: this.trips){
+			if (t.getState()){
+				return true;
+			}			
+		}
+		return false;
+	}
+	
+	
 }
