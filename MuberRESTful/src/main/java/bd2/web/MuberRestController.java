@@ -213,9 +213,47 @@ public class MuberRestController {
 		
 	}
 
-		//private void updateTrip(Long idTrip, Passenger passenger){
-			//passenger.
-		//}
+	private Boolean updateTrip(Long tripId, Long passengerId){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		
+		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, passengerId);
+		Passenger aPassenger = (Passenger) query.uniqueResult();
+		 
+		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		Query query1 = session.createQuery(hql1);
+		query1.setParameter(0, tripId);
+		Trip aTrip = (Trip) query1.uniqueResult();
+	
+		session.saveOrUpdate(aTrip);
+		if (aTrip.addPassenger(aPassenger)){
+			tx.commit();
+			session.close();
+			return true;
+		}else{
+			tx.rollback();
+			session.close();
+			return false;
+		}
+		
+	}
+	
+	private void updateCreditPassenger(Long passengerId, Double monto){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		
+		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, passengerId);
+		Passenger aPassenger = (Passenger) query.uniqueResult();
+	
+		session.saveOrUpdate(aPassenger);
+		aPassenger.addCredit(monto);
+		tx.commit();
+		session.close();		
+	}
 	
 	
 	//Listar todos los pasajeros registrados en Muber
@@ -344,11 +382,8 @@ public class MuberRestController {
 		Map<String, Object> aMap = new HashMap<String, Object>();
 		aMap.put("viajeId", idTrip);
 		aMap.put("pasejeroId", idPassenger);
-		Passenger aPassenger = getPassenger(idPassenger);
-		Trip aTrip = getTrip(idTrip);
-	//	aMap.put("six", aTrip.getPassengers().size());
-		if(aPassenger.singUpForTrip(aTrip)){
-			//update en base (no estoy seguro como)
+		
+		if(updateTrip(idTrip,idPassenger)){
 			aMap0.put("pasajero agregado a viaje", aMap);			
 		}else{
 			aMap0.put("no hay lugar para el viaje", aMap);			
@@ -396,6 +431,34 @@ public class MuberRestController {
 	
 	
 	//Cargar crédito a un pasajero en particular. USA PUT
+	//Este servicio recibe los siguientes parámetros: pasajeroId, monto
+	// curl -X POST -d "pasajeroId=2&monto=4000" http://localhost:8080/MuberRESTful/rest/services/pasajeros/cargarCredito
+	@RequestMapping(
+			value = "/pasajeros/cargarCredito", 
+			method = RequestMethod.POST, 
+			produces = "application/json", 
+			headers = "Accept=application/json"
+			)
+	
+	public String pasajerosCargarCredito(
+		@RequestParam("pasajeroId") Long idPassenger, 
+		@RequestParam("monto") Double monto
+			) {
+		Map<String, Object> aMap0 = new HashMap<String, Object>();		
+		Map<String, Object> aMap = new HashMap<String, Object>();
+		aMap.put("pasejeroId", idPassenger);
+		aMap.put("monto", monto);
+		updateCreditPassenger(idPassenger,monto);
+		aMap0.put("Monto agregado al credito", aMap);			
+		return new Gson().toJson(aMap0);	
+	}
+	
+	
+	
+	
+	
+	
+	
 	//Finalizar un viaje. Considerar que el viaje sólo puede finalizarse una vez. USA PUT
 	
 	/*  Listar los 10 conductores mejor calificados que no tengan viajes abiertos registrados
