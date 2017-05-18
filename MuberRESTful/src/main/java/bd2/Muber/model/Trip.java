@@ -124,13 +124,18 @@ public class Trip {
 		this.state = state;
 	}
 
-	public void close() {
-		this.state = false;
-		double amount = this.price / this.getPassengers().size();
-		Iterator<Passenger> iter = this.getPassengers().iterator();
-		while (iter.hasNext()) {
-		    Passenger elem = iter.next();
-		    elem.lessCredit(amount);
+	public boolean close() {
+		if (this.state == true){			
+			this.state = false;
+			double amount = this.price / this.getPassengers().size();
+			Iterator<Passenger> iter = this.getPassengers().iterator();
+			while (iter.hasNext()) {
+				Passenger elem = iter.next();
+				elem.lessCredit(amount);
+			}
+			return true;
+		}else{
+			return false;
 		}
 	}
 

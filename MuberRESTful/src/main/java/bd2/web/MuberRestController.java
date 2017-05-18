@@ -255,6 +255,30 @@ public class MuberRestController {
 		session.close();		
 	}
 	
+	private String closeTrip(Long tripId){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		 
+		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		Query query1 = session.createQuery(hql1);
+		query1.setParameter(0, tripId);
+		Trip aTrip = (Trip) query1.uniqueResult();
+	
+		session.saveOrUpdate(aTrip);
+		if (aTrip.close()){
+			tx.commit();
+			session.close();
+			return "Viaje Finalizado";
+		}else{
+			tx.rollback();
+			session.close();
+			return "El viaje ya se encontraba finalizado, operacion cancelada";
+		}
+		
+	}
+	
+	
+	
 	
 	//Listar todos los pasajeros registrados en Muber
 	@RequestMapping(value = "/pasajeros", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
@@ -455,11 +479,34 @@ public class MuberRestController {
 	
 	
 	
-	
-	
-	
-	
 	//Finalizar un viaje. Considerar que el viaje sólo puede finalizarse una vez. USA PUT
+	//http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar
+	//Este servicio recibe los siguientes parámetros: viajeId
+	//curl -X POST -d "viajeId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar
+	
+	@RequestMapping(
+			value = "/viajes/finalizar", 
+			method = RequestMethod.POST, 
+			produces = "application/json", 
+			headers = "Accept=application/json"
+			)
+
+	public String viajesFinalizar(
+		@RequestParam("viajeId") Long viajeId
+			) {
+		Map<String, Object> aMap = new HashMap<String, Object>();
+		String answer = closeTrip(viajeId);		
+		aMap.put(answer, viajeId);
+		return new Gson().toJson(aMap);	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*  Listar los 10 conductores mejor calificados que no tengan viajes abiertos registrados
 		http://localhost:8080/MuberRESTful/rest/services/conductores/top10
