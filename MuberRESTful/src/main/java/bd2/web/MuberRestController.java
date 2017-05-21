@@ -386,14 +386,12 @@ public class MuberRestController {
 		return new Gson().toJson(aMap0);
 	}
 	
-	//TODO: HACERLO
 	//Agregar un pasajero a un viaje ya creado. 
 	//Este servicio recibe los siguientes parámetros: viajeId, pasajeroId
-	// curl -X PUT -d "pasajeroId=5&viajeId=2" http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero
-	// curl --header "Content-Type: application/json" --request PUT --data '{"viajeId":"2","pasajeroId":"5"}' http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero
+	// curl -X PUT -d "pasajeroId=5&viajeId=2" http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero -G
 	@RequestMapping(
 			value = "/viajes/agregarPasajero", 
-			method = RequestMethod.POST, 
+			method = RequestMethod.PUT, 
 			produces = "application/json", 
 			headers = "Accept=application/json"
 			)
@@ -456,10 +454,10 @@ public class MuberRestController {
 	
 	//Cargar crédito a un pasajero en particular. USA PUT
 	//Este servicio recibe los siguientes parámetros: pasajeroId, monto
-	// curl -X POST -d "pasajeroId=2&monto=4000" http://localhost:8080/MuberRESTful/rest/services/pasajeros/cargarCredito
+	// curl -X PUT -d "pasajeroId=2&monto=4000" http://localhost:8080/MuberRESTful/rest/services/pasajeros/cargarCredito -G
 	@RequestMapping(
 			value = "/pasajeros/cargarCredito", 
-			method = RequestMethod.POST, 
+			method = RequestMethod.PUT, 
 			produces = "application/json", 
 			headers = "Accept=application/json"
 			)
@@ -482,11 +480,11 @@ public class MuberRestController {
 	//Finalizar un viaje. Considerar que el viaje sólo puede finalizarse una vez. USA PUT
 	//http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar
 	//Este servicio recibe los siguientes parámetros: viajeId
-	//curl -X POST -d "viajeId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar
+	//curl -X PUT -d "viajeId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar -G
 	
 	@RequestMapping(
 			value = "/viajes/finalizar", 
-			method = RequestMethod.POST, 
+			method = RequestMethod.PUT, 
 			produces = "application/json", 
 			headers = "Accept=application/json"
 			)
