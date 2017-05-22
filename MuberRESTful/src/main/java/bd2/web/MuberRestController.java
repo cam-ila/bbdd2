@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +35,6 @@ import bd2.Muber.model.Trip;
 @ResponseBody
 @EnableWebMvc
 public class MuberRestController {
-
-	
 	
 	protected Session getSession() {
 		Configuration cfg = new Configuration();
@@ -45,8 +44,7 @@ public class MuberRestController {
 		return session;
 	}
 	private void endSession(Session session){	
-	       // session.getTransaction().commit();
-	    	session.disconnect();
+	       	session.disconnect();
 	    	session.close();
 	}
 
@@ -82,7 +80,6 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();
 		tx.commit();
-	//	endSession(session);	
 		return result;
 	}
 	
@@ -94,7 +91,6 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();
 		tx.commit();
-	//	endSession(session);	
 		return result;
 	}
 
@@ -107,7 +103,6 @@ public class MuberRestController {
 		query.setParameter(0, id);
 		Driver result =(Driver) query.uniqueResult();
 		tx.commit();
-		//endSession(session);
 		return result;
 	}
 	
@@ -122,7 +117,7 @@ public class MuberRestController {
 		tx.commit();
 		endSession(session);
 		return result;
-	} //TODO: ver eso si esta vacio no tire error
+	} 
 	
 	private Trip getTrip(Long id){
 		Session session = getSession();	
@@ -133,11 +128,9 @@ public class MuberRestController {
 		query.setParameter(0, id);
 		Trip result = (Trip) query.uniqueResult();
 		tx.commit();
-	//	endSession(session);
 		return result;
-	} //TODO: ver lo de get(0) tiene que haber una forma de que me devuelva un solo elemento, o que eso si esta vcacio no tiere error
+	} 
 	
-	//TODO: hacer la consulta magica que haga todo lo que pide, es con consulta no?
 	private List<Driver> getDriversTopTen(){
 		Session session = getSession();	
 		Transaction tx = null;
@@ -148,7 +141,6 @@ public class MuberRestController {
 		Query query = session.createQuery(hql);
 		List<Driver> result = query.list();
 		tx.commit();
-		//endSession(session);	
 		return result;
 	}
 	
@@ -277,9 +269,6 @@ public class MuberRestController {
 		
 	}
 	
-	
-	
-	
 	//Listar todos los pasajeros registrados en Muber
 	@RequestMapping(value = "/pasajeros", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String pasajeros() {
@@ -312,11 +301,10 @@ public class MuberRestController {
 		}
 		return new Gson().toJson(aMap);
 	}
-	
-	//Obtener la información de un conductor (nombre de usuario, viajes realizados, puntaje promedio y fecha de licencia)
-	//  $ curl -G -d "conductorId=1" http://localhost:8080/MuberRESTful/rest/services/conductores/detalles
-
-	
+  /*
+   * Obtener la información de un conductor (nombre de usuario, viajes realizados, puntaje promedio y fecha de licencia)
+   * curl -G -d "conductorId=1" http://localhost:8080/MuberRESTful/rest/services/conductores/detalles
+   */
 	@RequestMapping(
 			value = "/conductores/detalles{conductorId}",  
 			method = RequestMethod.GET, 
@@ -340,15 +328,14 @@ public class MuberRestController {
 			aMap.put("trips", tripMap);
 			aMap.put("Puntaje promedio", d.averageScore());
 			aMap.put("Fecha de licencia", d.getLicenseDate());
-			
-		
 		
 		return new Gson().toJson(aMap);		
 	}
-	
-	
-	//Crear un viaje ->  recibe los siguientes parámetros: origen, destino, conductorId,	costoTotal, cantidadPasajeros
-	// curl -d "origen=La Plata&destino=Capital&conductorId=1&costoTotal=300&cantidadPasajeros=3" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo	
+  
+  /*
+   * Crear un viaje: parámetros: origen, destino, conductorId,	costoTotal, cantidadPasajeros
+   * curl -d "origen=La Plata&destino=Capital&conductorId=1&costoTotal=300&cantidadPasajeros=3" http://localhost:8080/MuberRESTful/rest/services/viajes/nuevo	
+   */
 	@RequestMapping(
 			value = "/viajes/nuevo", 
 			method = RequestMethod.POST, 
@@ -385,10 +372,11 @@ public class MuberRestController {
 				
 		return new Gson().toJson(aMap0);
 	}
-	
-	//Agregar un pasajero a un viaje ya creado. 
-	//Este servicio recibe los siguientes parámetros: viajeId, pasajeroId
-	// curl -X PUT -d "pasajeroId=5&viajeId=2" http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero -G
+
+  /*
+   * Agregar un pasajero a un viaje ya creado.Parámetros: viajeId, pasajeroId
+   * curl -X PUT -d "pasajeroId=5&viajeId=2" http://localhost:8080/MuberRESTful/rest/services/viajes/agregarPasajero -G
+   */
 	@RequestMapping(
 			value = "/viajes/agregarPasajero", 
 			method = RequestMethod.PUT, 
@@ -413,10 +401,10 @@ public class MuberRestController {
 		return new Gson().toJson(aMap0);		
 	}
 	
-	
-	
-	
-	//Crear una calificación de un pasajero para un viaje en particular, recibe los siguientes parámetros: viajeId, pasajeroId, puntaje, comentario
+	/*
+   * Crear una calificación de un pasajero para un viaje en particular, Parámetros: viajeId, pasajeroId, puntaje, comentario
+   * curl -d "viajeId=1&pasajeroId=5&puntaje=1&comentario='un comentario'" http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
+   */
 	@RequestMapping(
 			value = "/viajes/calificar", 
 			method = RequestMethod.POST, 
@@ -446,15 +434,13 @@ public class MuberRestController {
 			aMap0.put("No se puedo agregar la calificacion al viaje", aMap );
 		}
 			
-		
 		return new Gson().toJson(aMap0);		
 	}
-	// curl -d "viajeId=1&pasajeroId=5&puntaje=1&comentario='tara raea erjk'" http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
 	
-	
-	//Cargar crédito a un pasajero en particular. USA PUT
-	//Este servicio recibe los siguientes parámetros: pasajeroId, monto
-	// curl -X PUT -d "pasajeroId=2&monto=4000" http://localhost:8080/MuberRESTful/rest/services/pasajeros/cargarCredito -G
+  /*
+   * Cargar crédito a un pasajero en particular. USA PUT. Parámetros: pasajeroId, monto
+   * curl -X PUT -d "pasajeroId=2&monto=4000" http://localhost:8080/MuberRESTful/rest/services/pasajeros/cargarCredito -G
+   */
 	@RequestMapping(
 			value = "/pasajeros/cargarCredito", 
 			method = RequestMethod.PUT, 
@@ -475,13 +461,10 @@ public class MuberRestController {
 		return new Gson().toJson(aMap0);	
 	}
 	
-	
-	
-	//Finalizar un viaje. Considerar que el viaje sólo puede finalizarse una vez. USA PUT
-	//http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar
-	//Este servicio recibe los siguientes parámetros: viajeId
-	//curl -X PUT -d "viajeId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar -G
-	
+	/*
+   * Finalizar un viaje. Considerar que el viaje sólo puede finalizarse una vez. USA PUT. Parámetros: viajeId
+   * curl -X PUT -d "viajeId=1" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar -G
+   */	
 	@RequestMapping(
 			value = "/viajes/finalizar", 
 			method = RequestMethod.PUT, 
@@ -498,18 +481,9 @@ public class MuberRestController {
 		return new Gson().toJson(aMap);	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*  Listar los 10 conductores mejor calificados que no tengan viajes abiertos registrados
-		http://localhost:8080/MuberRESTful/rest/services/conductores/top10
-		Metodo: GET
-		Este servicio no requiere parámetros
+	/*
+	 * Listar los 10 conductores mejor calificados que no tengan viajes abiertos registrados
+	 * curl http://localhost:8080/MuberRESTful/rest/services/conductores/top10
 	 */
 	@RequestMapping(
 			value = "/conductores/top10", 
@@ -521,7 +495,7 @@ public class MuberRestController {
 	public String conductoresTop10() {
 		Map<String, Object> aMap = new HashMap<String, Object>();
 		Map<Integer, Object> aMap0 = new HashMap<Integer, Object>();
-		List<Driver> driverList = getDriversTopTen(); //HACER LA CONSULTA DEL TOP TEN
+		List<Driver> driverList = getDriversTopTen(); 
 		
 		Collection<Driver> withAllTripClosed = new ArrayList<Driver>();
 		
@@ -534,18 +508,24 @@ public class MuberRestController {
 		Collections.sort( list, new Comparator<Driver>( ){
 			@Override
 			public int compare(Driver d1, Driver d2) {
-				return Float.compare(d1.averageScore(), d2.averageScore());
+				if (d1.averageScore() < d2.averageScore()){
+					return 1;
+				} else if (d1.averageScore() > d2.averageScore()){
+					return -1;
+				} else {
+					return 0;
+				}
 			}		
 		} );
+		
+		Iterator<Driver> l = list.iterator();
 		Integer i = 1;
-		for (Driver o: list){
-			aMap.put("Nombre", o.getFullName());	
-			aMap.put("Calificacion", o.averageScore());
-			aMap0.put(i, aMap);
-			i++;
+		while (l.hasNext()) {
+			Driver d = l.next();
+			aMap.put(d.getFullName(), d.averageScore());
+			
 		}
-		return new Gson().toJson(aMap0);		
+		return new Gson().toJson(aMap);		
 	}
-
-
+	
 }
