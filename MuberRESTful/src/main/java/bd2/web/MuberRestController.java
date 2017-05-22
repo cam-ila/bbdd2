@@ -520,9 +520,11 @@ public class MuberRestController {
 		
 		Iterator<Driver> l = list.iterator();
 		Integer i = 1;
-		while (l.hasNext()) {
+		while (l.hasNext() && i<=10) {
 			Driver d = l.next();
 			aMap.put(d.getFullName(), d.averageScore());
+			i++;
+			
 			
 		}
 		return new Gson().toJson(aMap);		

@@ -18,7 +18,7 @@ curl http://localhost:8080/MuberRESTful/rest/services/abiertos
 
 echo -e "\n\nTop 10"
 
-curl http://localhost:8080/MuberRESTful/rest/services/conductores
+curl http://localhost:8080/MuberRESTful/rest/services/conductores/top10
 
 echo -e "\n\n---------------------------- Casos de prueba -------------------------------------------"
 
