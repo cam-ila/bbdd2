@@ -31,6 +31,10 @@ public class Passenger extends User{
 	public void setCredit(double credit) {
 		this.credit = credit;
 	}
+	
+	public void addCredit(double monto) {
+		this.credit += monto;
+	}
 
 	public void addScore(Trip trip, Integer intScore){
 		/**trip.addScore(this, intScore);

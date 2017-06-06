@@ -30,6 +30,9 @@ public class Driver extends User {
 	public Date getLicenseDate() {
 		return licenseDate;
 	}
+	public String getFullName() {
+		return super.getFullName();
+	}
 	public void setLicenseDate(Date date) {
 		this.licenseDate = date;
 	}
@@ -51,4 +54,14 @@ public class Driver extends User {
 		}
 		return average;
 	}
+	public boolean haveOpenTrip(){
+		for (Trip t: this.trips){
+			if (t.getState()){
+				return true;
+			}			
+		}
+		return false;
+	}
+	
+	
 }
