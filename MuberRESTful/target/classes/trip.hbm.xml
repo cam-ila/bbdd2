@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-
+//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="bd2.Muber.model">
+	<class name="Trip" table="TRIP">
+		<id name="idTrip" column="ID_TRIP">
+			<generator class="native"/>
+		</id>
+		
+		
+		<property name="date" column="DATE" type="date" />
+		<property name="maxPassenger" column="MAX_PASSENGER" type="integer" />
+		<property name="state" column="STATE" type="true_false" />
+		<property name="price" column="PRICE" type="double" />
+		<property name="origin" column="ORIGIN" type="string" />
+		<property name="destination" column="DESTINATION" type="string" />
+		
+<!-- 	Muchos trips pertenecen a un driver.  -->
+		
+		<many-to-one name="driver" column="ID_USER" not-null="true" cascade="all" />
+		<set name="passengers" cascade="all">
+			<key column="ID_TRIP" not-null="false"/>
+			<one-to-many class="Passenger" />
+		</set>
+		
+		<set name="scores" cascade="all" inverse="true">
+<!-- 		el inverse lo hace bidireccional -->
+
+			<key column="ID_TRIP" not-null="false"/>
+			<one-to-many class="Score" />
+		</set> 
+	</class>
+</hibernate-mapping>
+

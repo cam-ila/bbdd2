@@ -1,22 +1,19 @@
 package bd2.web;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.internal.Collections;
+import org.hibernate.mapping.Collection;
+import org.hibernate.mapping.Map;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +26,7 @@ import bd2.Muber.model.Driver;
 import bd2.Muber.model.Passenger;
 import bd2.Muber.model.Score;
 import bd2.Muber.model.Trip;
+import javassist.bytecode.Descriptor.Iterator;
 
 @ControllerAdvice
 @RequestMapping("/services")
