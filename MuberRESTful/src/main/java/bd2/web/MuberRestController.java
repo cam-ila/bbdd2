@@ -58,52 +58,6 @@ public class MuberRestController {
 		return result;
 	}
 	
-	private List<Driver> getDrivers(){
-		Session session = getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Driver";
-		Query query = session.createQuery(hql);
-		List<Driver> result = query.list();
-		tx.commit();
-		endSession(session);	
-		return result;
-	}
-	
-	private List<Trip> getClosedTrips(){
-		Session session = getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=false ";
-		Query query = session.createQuery(hql);
-		List<Trip> result = query.list();
-		tx.commit();
-		return result;
-	}
-	
-	private List<Trip> getOpenedTrips(){
-		Session session = getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=true ";
-		Query query = session.createQuery(hql);
-		List<Trip> result = query.list();
-		tx.commit();
-		return result;
-	}
-
-	private Driver getDriver(Long id){
-		Session session = getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, id);
-		Driver result =(Driver) query.uniqueResult();
-		tx.commit();
-		return result;
-	}
-	
 	private Passenger getPassenger(Long id){
 		Session session = getSession();	
 		Transaction tx = null;
@@ -115,19 +69,43 @@ public class MuberRestController {
 		tx.commit();
 		endSession(session);
 		return result;
-	} 
+	}
+	private void updateCreditPassenger(Long passengerId, Double monto){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		
+		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, passengerId);
+		Passenger aPassenger = (Passenger) query.uniqueResult();
 	
-	private Trip getTrip(Long id){
+		session.saveOrUpdate(aPassenger);
+		aPassenger.addCredit(monto);
+		tx.commit();
+		session.close();		
+	}
+	private Driver getDriver(Long id){
 		Session session = getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, id);
-		Trip result = (Trip) query.uniqueResult();
+		Driver result =(Driver) query.uniqueResult();
 		tx.commit();
 		return result;
-	} 
+	}
+	private List<Driver> getDrivers(){
+		Session session = getSession();	
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		String hql = "FROM bd2.Muber.model.Driver";
+		Query query = session.createQuery(hql);
+		List<Driver> result = query.list();
+		tx.commit();
+		endSession(session);	
+		return result;
+	}
 	
 	private List<Driver> getDriversTopTen(){
 		Session session = getSession();	
@@ -141,8 +119,111 @@ public class MuberRestController {
 		tx.commit();
 		return result;
 	}
+	private Trip getTrip(Long id){
+		Session session = getSession();	
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		String hql = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, id);
+		Trip result = (Trip) query.uniqueResult();
+		tx.commit();
+		return result;
+	}
+	private List<Trip> getOpenedTrips(){
+		Session session = getSession();	
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=true ";
+		Query query = session.createQuery(hql);
+		List<Trip> result = query.list();
+		tx.commit();
+		return result;
+	}
+	private List<Trip> getClosedTrips(){
+		Session session = getSession();	
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=false ";
+		Query query = session.createQuery(hql);
+		List<Trip> result = query.list();
+		tx.commit();
+		return result;
+	}
 	
+	private Boolean saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
+		Session session = getSession();
 	
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
+			Query query = session.createQuery(hql);
+			query.setParameter(0, idDriver);
+			Driver result =(Driver) query.uniqueResult();
+			Trip aTrip = new Trip(result, date, maxPassenger, price, origin, destination);
+			session.save(aTrip);
+			tx.commit();
+			session.disconnect();
+			session.close();
+			return true;
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+				session.disconnect();
+				session.close();
+				return false;
+		
+		}
+		
+	}
+	private Boolean updateTrip(Long tripId, Long passengerId){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		
+		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, passengerId);
+		Passenger aPassenger = (Passenger) query.uniqueResult();
+		 
+		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		Query query1 = session.createQuery(hql1);
+		query1.setParameter(0, tripId);
+		Trip aTrip = (Trip) query1.uniqueResult();
+	
+		session.saveOrUpdate(aTrip);
+		if (aTrip.addPassenger(aPassenger)){
+			tx.commit();
+			session.close();
+			return true;
+		}else{
+			tx.rollback();
+			session.close();
+			return false;
+		}
+		
+	}
+	private String closeTrip(Long tripId){
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		 
+		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+		Query query1 = session.createQuery(hql1);
+		query1.setParameter(0, tripId);
+		Trip aTrip = (Trip) query1.uniqueResult();
+	
+		session.saveOrUpdate(aTrip);
+		if (aTrip.close()){
+			tx.commit();
+			session.close();
+			return "Viaje Finalizado";
+		}else{
+			tx.rollback();
+			session.close();
+			return "El viaje ya se encontraba finalizado, operacion cancelada";
+		}
+		
+	}
 	private Boolean saveScore(Long idTrip, Long idPassenger,Integer score, String description){
 		Session session = getSession();
 		
@@ -173,97 +254,6 @@ public class MuberRestController {
 				session.disconnect();
 				return false;
 		}		
-		
-	}
-	
-	private Boolean saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
-		Session session = getSession();
-
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
-			Query query = session.createQuery(hql);
-			query.setParameter(0, idDriver);
-			Driver result =(Driver) query.uniqueResult();
-			Trip aTrip = new Trip(result, date, maxPassenger, price, origin, destination);
-			session.save(aTrip);
-			tx.commit();
-			session.disconnect();
-			session.close();
-			return true;
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-				session.disconnect();
-				session.close();
-				return false;
-		
-		}
-		
-	}
-
-	private Boolean updateTrip(Long tripId, Long passengerId){
-		Session session = getSession();
-		Transaction tx = session.beginTransaction();
-		
-		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, passengerId);
-		Passenger aPassenger = (Passenger) query.uniqueResult();
-		 
-		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
-		Query query1 = session.createQuery(hql1);
-		query1.setParameter(0, tripId);
-		Trip aTrip = (Trip) query1.uniqueResult();
-	
-		session.saveOrUpdate(aTrip);
-		if (aTrip.addPassenger(aPassenger)){
-			tx.commit();
-			session.close();
-			return true;
-		}else{
-			tx.rollback();
-			session.close();
-			return false;
-		}
-		
-	}
-	
-	private void updateCreditPassenger(Long passengerId, Double monto){
-		Session session = getSession();
-		Transaction tx = session.beginTransaction();
-		
-		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, passengerId);
-		Passenger aPassenger = (Passenger) query.uniqueResult();
-	
-		session.saveOrUpdate(aPassenger);
-		aPassenger.addCredit(monto);
-		tx.commit();
-		session.close();		
-	}
-	
-	private String closeTrip(Long tripId){
-		Session session = getSession();
-		Transaction tx = session.beginTransaction();
-		 
-		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
-		Query query1 = session.createQuery(hql1);
-		query1.setParameter(0, tripId);
-		Trip aTrip = (Trip) query1.uniqueResult();
-	
-		session.saveOrUpdate(aTrip);
-		if (aTrip.close()){
-			tx.commit();
-			session.close();
-			return "Viaje Finalizado";
-		}else{
-			tx.rollback();
-			session.close();
-			return "El viaje ya se encontraba finalizado, operacion cancelada";
-		}
 		
 	}
 	

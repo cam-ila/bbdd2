@@ -12,7 +12,7 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-<!-- Imports contenido of dataSource and hibernate config -->
+<!-- Imports contents of dataSource and hibernate config -->
 	<import resource="classpath:dataSource.xml" />
     <import resource="classpath:hibernate.cfg.xml" />
  <!-- End of import -->
@@ -30,8 +30,13 @@
 		class="bd2.Muber.util.Bd2ContextProvider">
 	</bean>
 
+<!-- DTO (?) -->
+	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
+	</bean>
+<!-- end DTO -->
+
 <!-- Start of RepositoryLocator -->
-	<bean id="repositoryLocator" class="bd2.Muber.repositories.impl.RepositoryLocator"
+	<bean id="repositoryLocator" class="bd2.Muber.repositories.RepositoryLocator"
 		factory-method="getInstance">
 		<property name="passengerRepository">
 			<ref bean="passengerRepository" />
@@ -93,13 +98,12 @@
 		<property name="scoreService">
 			<ref bean="scoreService" />
 		</property>
+		<property name="dtoFactory">
+			<ref bean="dtoFactory" />
+		</property>
 	</bean>
 <!-- End of Service Locator -->
 
-<!-- DTO (?) -->
-	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
-	</bean>
-<!-- end DTO -->
 
 <!-- Start Services -->	
 	<bean id="baseService" class="bd2.Muber.services.impl.BaseService">

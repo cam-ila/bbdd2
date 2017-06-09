@@ -35,7 +35,7 @@ public class DriverDTO extends UserDTO {
 	}
 
 	/**
-	 * @param trips the trips to set
+	 * @param trips  the trips to set
 	 */
 	public void setTrips(Collection<Trip> trips) {
 		this.trips = trips;

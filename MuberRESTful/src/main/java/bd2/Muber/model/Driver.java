@@ -82,7 +82,7 @@ public class Driver extends User {
 		return average;
 	}
 	/**
-    * Checks of an open trip. If there is returns true, else returns false.
+    * Checks for an open trip. If there is returns true, else returns false.
     * 
     * @return true if there is an open trip
     * @return false if there is not an open trip
