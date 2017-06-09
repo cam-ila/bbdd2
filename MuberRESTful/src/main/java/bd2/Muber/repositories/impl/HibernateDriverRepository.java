@@ -25,7 +25,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		Driver result =(Driver) query.uniqueResult();
 		
 		DriverDTO driverDTO = new DriverDTO();
-		if (driver != null){
+		if (result != null){
 			driverDTO = new DriverDTO(result);
 		}
 		tx.rollback(); //por lo que vi en algunos lugares, a menos que se guarden cosas en la BD se hace rollback por las dudas
@@ -46,17 +46,17 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		List<DriverDTO> driversDTO = new ArrayList<DriverDTO>();
 		for (Driver d : result) {
 			DriverDTO dri = new DriverDTO(d);
-			DriversDTO.add(dri);
+			driversDTO.add(dri);
 		}
 		tx.rollback();
 		session.disconnect();
 		session.close();		
-		return DriversDTO;
+		return driversDTO;
 	}
 	
 	//TODO chequear, que no resolvemos lo del top 10 en la consulta. Eso esta bien?
 	
-	public List<DriverDTO> getDriversTopTen(){ 
+	public List<DriverDTO> getDriversTop10(){ 
 		Session session = this.getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
@@ -69,14 +69,15 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		List<DriverDTO> driversDTO = new ArrayList<DriverDTO>();
 		for (Driver d : result) {
 			DriverDTO dri = new DriverDTO(d);
-			DriversDTO.add(dri);
+			driversDTO.add(dri);
 		}
 		tx.rollback();
 		session.disconnect();
 		session.close();		
-		return DriversDTO;
+		return driversDTO;
 	}
-	
+
+
 	
 	
 }

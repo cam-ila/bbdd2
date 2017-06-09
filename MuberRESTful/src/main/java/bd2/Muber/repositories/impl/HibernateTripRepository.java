@@ -37,7 +37,7 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		tx.rollback();
 		session.disconnect();
 		session.close();
-		return TripDTO;
+		return tripDTO;
 	}
 	
 	@Override
@@ -161,6 +161,12 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 			return "El viaje ya se encontraba finalizado, operacion cancelada";
 		}
 		
+	}
+
+	@Override
+	public List<TripDTO> getTrips() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

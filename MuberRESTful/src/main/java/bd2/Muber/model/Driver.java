@@ -61,7 +61,7 @@ public class Driver extends User {
     * @return false when the trip was already closed
     */
 	public boolean endTrip(Trip trip){
-		trip.close();
+		return trip.close();
 	}
 	/**
     * Calculates the average driver's score.

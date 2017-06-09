@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
+//import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import bd2.Muber.model.Driver;
 import bd2.Muber.model.Passenger;
@@ -21,9 +21,9 @@ public class Main {
 		Configuration cfg = new Configuration();
 		cfg.configure("hibernate.cfg.xml");		
 	
-		new SchemaExport(cfg).drop(true, true);
+		//new SchemaExport(cfg).drop(true, true);
 		
-		new SchemaExport(cfg).create(true, true);
+		//new SchemaExport(cfg).create(true, true);
 		
 		SessionFactory sf = cfg.buildSessionFactory();
 		

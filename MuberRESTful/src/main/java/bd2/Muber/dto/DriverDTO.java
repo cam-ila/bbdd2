@@ -19,6 +19,10 @@ public class DriverDTO extends UserDTO {
 	private boolean haveOpenTrip;
 	private float averageScore;
 	
+	public DriverDTO(){
+		
+	}
+
 	public DriverDTO(Driver aDriver){
 		super(aDriver);
 		this.setLicenseDate(aDriver.getLicenseDate());
@@ -27,6 +31,7 @@ public class DriverDTO extends UserDTO {
 		this.setTrips(aDriver.getTrips());
 	}
 
+	
 	/**
 	 * @return the trips
 	 */

@@ -25,6 +25,11 @@ public class PassengerDTO extends UserDTO{
 	}
 
 
+	public PassengerDTO() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	/**
 	 * @return the scores
 	 */

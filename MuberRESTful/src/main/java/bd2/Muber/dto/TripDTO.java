@@ -39,6 +39,10 @@ public class TripDTO {
 		this.setOrigin(aTrip.getOrigin());
 		this.setDestination(aTrip.getDestination());
 	}
+	public TripDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	/**
 	 * @return the idTrip
 	 */

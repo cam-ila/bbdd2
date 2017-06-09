@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
 import bd2.Muber.dto.PassengerDTO;
 
 import bd2.Muber.model.*;
-import bd2.Muber.repositories.Long;
+
 import bd2.Muber.repositories.PassengerRepository;
 
 public class HibernatePassengerRepository extends BaseHibernateRepository implements PassengerRepository{
@@ -27,13 +27,13 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		query.setParameter(0, id);
 		Passenger result = (Passenger) query.uniqueResult();
 		PassengerDTO passengerDTO = new PassengerDTO();
-		if (resul != null){
-			passengerDTO = new PassengerDTO(resul);
+		if (result != null){
+			passengerDTO = new PassengerDTO(result);
 		}
 		tx.rollback();
 		session.disconnect();
 		session.close();
-		return pasajeroDTO;
+		return passengerDTO;
 	}
 	
 	public List<PassengerDTO> getPassengers(){

@@ -15,6 +15,10 @@ public class UserDTO {
 	private String fullName;
 	private String password;
 	
+	public UserDTO(){
+		
+	}
+	
 	public UserDTO(User anUser){
 		this.setIdUser(anUser.getIdUser());
 		this.setFullName(anUser.getFullName());
