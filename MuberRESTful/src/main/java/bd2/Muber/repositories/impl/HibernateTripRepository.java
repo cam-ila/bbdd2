@@ -8,12 +8,15 @@ import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import bd2.Muber.dto.DriverDTO;
+import bd2.Muber.dto.PassengerDTO;
 import bd2.Muber.dto.TripDTO;
 import bd2.Muber.model.*;
 import bd2.Muber.repositories.TripRepository;
 
+@Transactional
 public class HibernateTripRepository extends BaseHibernateRepository implements TripRepository{
 
 	public HibernateTripRepository(){
@@ -43,8 +46,7 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 	@Override
 	public List<TripDTO> getOpenedTrips(){
 		Session session = this.getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
+		Transaction tx = session.beginTransaction();
 		String hql = "FROM bd2.Muber.model.Trip p WHERE p.state=true ";
 		Query query = session.createQuery(hql);
 		List<Trip> result = query.list();

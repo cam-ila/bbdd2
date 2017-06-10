@@ -5,7 +5,8 @@ package bd2.Muber.services;
 
 import java.util.List;
 
-import bd2.Muber.model.Trip;
+import bd2.Muber.dto.TripDTO;
+
 
 /**
  * @author cami
@@ -13,16 +14,16 @@ import bd2.Muber.model.Trip;
  */
 public interface TripService {
 	
-	Trip findById(Long id);
+	TripDTO findById(Long id);
 	
-	List<Trip> findAllClosedTrips();
+	List<TripDTO> findAllClosedTrips();
 	
-	List<Trip> findAllOpenedTrips();
+	List<TripDTO> findAllOpenedTrips();
 	
-	void saveTrip(Trip aTrip);
+	void saveTrip(TripDTO aTrip);
 	
-	void updateTrip(Trip aTrip);
+	void updateTrip(TripDTO aTrip);
 	
-	void closeTrip(Trip aTrip);
+	void closeTrip(TripDTO aTrip);
 
 }

@@ -2,16 +2,16 @@ package bd2.Muber.services;
 
 import java.util.List;
 
-import bd2.Muber.model.Passenger;
+import bd2.Muber.dto.PassengerDTO;
 
 public interface PassengerService {
 	
-	Passenger findById(Long id);	
+	PassengerDTO findById(Long id);	
 	
-	void savePassenger(Passenger aPassenger);
+	void savePassenger(PassengerDTO aPassenger);
 	
-	void updatePassenger(Passenger aPassenger);
+	void updatePassenger(PassengerDTO aPassenger);
 	
-	List<Passenger> findAllPassenger();
+	List<PassengerDTO> findAllPassenger();
 	
 }

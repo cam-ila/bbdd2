@@ -5,7 +5,7 @@ package bd2.Muber.services;
 
 import java.util.List;
 
-import bd2.Muber.model.Driver;
+import bd2.Muber.dto.DriverDTO;
 
 /**
  * @author cami
@@ -13,8 +13,8 @@ import bd2.Muber.model.Driver;
  */
 public interface DriverService {
 	
-	Driver findById(long id);
+	DriverDTO findById(long id);
 	
-	List<Driver> findAllDrivers();
+	List<DriverDTO> findAllDrivers();
 
 }

@@ -5,6 +5,7 @@ package bd2.Muber.services.impl;
 
 import java.util.List;
 
+import bd2.Muber.dto.TripDTO;
 import bd2.Muber.model.Trip;
 import bd2.Muber.services.TripService;
 
@@ -15,37 +16,36 @@ import bd2.Muber.services.TripService;
 public class TripServiceImpl extends BaseService implements TripService{
 
 	@Override
-	public Trip findById(Long id) {
+	public TripDTO findById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Trip> findAllClosedTrips() {
+	public List<TripDTO> findAllClosedTrips() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Trip> findAllOpenedTrips() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TripDTO> findAllOpenedTrips() {
+		return tripRepository.getOpenedTrips();
 	}
 
 	@Override
-	public void saveTrip(Trip aTrip) {
+	public void saveTrip(TripDTO aTrip) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updateTrip(Trip aTrip) {
+	public void updateTrip(TripDTO aTrip) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void closeTrip(Trip aTrip) {
+	public void closeTrip(TripDTO aTrip) {
 		// TODO Auto-generated method stub
 		
 	}
