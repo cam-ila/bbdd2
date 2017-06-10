@@ -12,14 +12,14 @@ import bd2.Muber.model.Score;
 import bd2.Muber.model.Trip;
 
 /**
- * @author cami
+ * 
  *
  */
 public class TripDTO {
 	private Long idTrip;
 	private Collection<Passenger> passengers;
 	private Collection<Score> scores;
-	private Driver driver;
+	private DriverDTO driver;
 	private Date date;
 	private Integer maxPassenger;
 	private Boolean state;
@@ -31,7 +31,7 @@ public class TripDTO {
 		this.idTrip = aTrip.getIdTrip();
 		this.setPassengers(aTrip.getPassengers());
 		this.setScores(aTrip.getScores());
-		this.driver = aTrip.getDriver();
+		this.setDriver(aTrip.getDriver());
 		this.setDate(aTrip.getDate());
 		this.setMaxPassenger(aTrip.getMaxPassenger());
 		this.setState(aTrip.getState());
@@ -82,14 +82,14 @@ public class TripDTO {
 	/**
 	 * @return the driver
 	 */
-	public Driver getDriver() {
+	public DriverDTO getDriver() {
 		return driver;
 	}
 	/**
 	 * @param driver the driver to set
 	 */
 	public void setDriver(Driver driver) {
-		this.driver = driver;
+		this.driver = new DriverDTO(driver);
 	}
 	/**
 	 * @return the date

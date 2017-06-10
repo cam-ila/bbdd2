@@ -12,9 +12,8 @@ public class ScoreServiceImpl extends BaseService implements ScoreService {
 	}
 
 	@Override
-	public void saveScore(Score aScore) {
-		// TODO Auto-generated method stub
-		
+	public boolean saveScore(Long idTrip, Long idPassenger,Integer score, String description) {
+		return scoreRepository.saveScore(idTrip, idPassenger, score, description);		
 	}
 
 }

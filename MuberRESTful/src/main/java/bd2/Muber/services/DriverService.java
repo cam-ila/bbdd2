@@ -16,5 +16,8 @@ public interface DriverService {
 	DriverDTO findById(long id);
 	
 	List<DriverDTO> findAllDrivers();
+	
+	List<DriverDTO> getDriversTop10();
+	
 
 }

@@ -6,6 +6,6 @@ public interface ScoreService {
 	
 	Score findById (Long id);
 	
-	void saveScore(Score aScore);
+	boolean saveScore(Long idTrip, Long idPassenger,Integer score, String description);
 
 }

@@ -3,6 +3,7 @@
  */
 package bd2.Muber.services.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import bd2.Muber.dto.TripDTO;
@@ -10,7 +11,7 @@ import bd2.Muber.model.Trip;
 import bd2.Muber.services.TripService;
 
 /**
- * @author cami
+ * 
  *
  */
 public class TripServiceImpl extends BaseService implements TripService{
@@ -33,21 +34,19 @@ public class TripServiceImpl extends BaseService implements TripService{
 	}
 
 	@Override
-	public void saveTrip(TripDTO aTrip) {
-		// TODO Auto-generated method stub
+	public boolean saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination) {		
+		return tripRepository.saveTrip(idDriver, date, maxPassenger, price, origin, destination);
+	}
+
+	@Override
+	public boolean updateTrip(Long tripId, Long passengerId) {
+		return tripRepository.updateTrip(tripId, passengerId);
 		
 	}
 
 	@Override
-	public void updateTrip(TripDTO aTrip) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeTrip(TripDTO aTrip) {
-		// TODO Auto-generated method stub
-		
+	public String closeTrip(Long tripId) {
+		return tripRepository.closeTrip(tripId);
 	}
 	
 

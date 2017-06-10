@@ -39,5 +39,10 @@ public class PassengerServiceImpl extends BaseService implements PassengerServic
 		return passengerRepository.getPassengers();
 	}
 
+	@Override
+	public void updateCreditPassenger(Long passengerId, Double monto) {
+		passengerRepository.updateCreditPassenger(passengerId, monto);		
+	}
+
 	
 }

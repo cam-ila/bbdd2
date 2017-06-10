@@ -14,4 +14,6 @@ public interface PassengerService {
 	
 	List<PassengerDTO> findAllPassenger();
 	
+	void updateCreditPassenger(Long passengerId, Double monto);
+	
 }

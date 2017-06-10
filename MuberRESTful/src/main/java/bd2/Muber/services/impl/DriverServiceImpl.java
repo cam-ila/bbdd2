@@ -25,4 +25,9 @@ public class DriverServiceImpl extends BaseService implements DriverService{
 		return driverRepository.getDrivers();
 	}
 
+	@Override
+	public List<DriverDTO> getDriversTop10() {
+		return driverRepository.getDriversTop10();
+	}
+
 }

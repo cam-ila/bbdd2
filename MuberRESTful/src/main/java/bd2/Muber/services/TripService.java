@@ -3,13 +3,14 @@
  */
 package bd2.Muber.services;
 
+import java.util.Date;
 import java.util.List;
 
 import bd2.Muber.dto.TripDTO;
 
 
 /**
- * @author cami
+ * 
  *
  */
 public interface TripService {
@@ -20,10 +21,10 @@ public interface TripService {
 	
 	List<TripDTO> findAllOpenedTrips();
 	
-	void saveTrip(TripDTO aTrip);
+	boolean updateTrip(Long tripId, Long passengerId);
 	
-	void updateTrip(TripDTO aTrip);
-	
-	void closeTrip(TripDTO aTrip);
+	String closeTrip (Long tripId);
+
+	boolean saveTrip(Long idDriver, Date date, Integer maxPassenger, Double price, String origin, String destination);
 
 }
