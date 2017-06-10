@@ -7,7 +7,7 @@
 <hibernate-mapping package="bd2.Muber.model">
 	<class name="User" table="USER" >
 		<id name="idUser" column="ID_USER">
-			<generator class="hilo"/>
+			<generator class="increment"/>
 		</id>
 		<property name="fullName" column="FULL_NAME" type="string" not-null="true"/>
 		<property name="password" column="PASSWORD" type="string" not-null="true"/>

@@ -6,12 +6,13 @@ package bd2.Muber.services.impl;
 import java.util.List;
 
 import bd2.Muber.model.Driver;
+import bd2.Muber.services.DriverService;
 
 /**
  * @author cami
  *
  */
-public class DriverServiceImpl implements DriverService{
+public class DriverServiceImpl extends BaseService implements DriverService{
 
 	@Override
 	public Driver findById(long id) {

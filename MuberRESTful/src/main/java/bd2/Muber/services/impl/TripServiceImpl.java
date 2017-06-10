@@ -6,12 +6,13 @@ package bd2.Muber.services.impl;
 import java.util.List;
 
 import bd2.Muber.model.Trip;
+import bd2.Muber.services.TripService;
 
 /**
  * @author cami
  *
  */
-public class TripServiceImpl implements TripService{
+public class TripServiceImpl extends BaseService implements TripService{
 
 	@Override
 	public Trip findById(Long id) {

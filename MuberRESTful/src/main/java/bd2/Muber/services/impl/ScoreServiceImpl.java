@@ -1,8 +1,9 @@
 package bd2.Muber.services.impl;
 
 import bd2.Muber.model.Score;
+import bd2.Muber.services.ScoreService;
 
-public class ScoreServiceImpl implements ScoreService {
+public class ScoreServiceImpl extends BaseService implements ScoreService {
 
 	@Override
 	public Score findById(Long id) {

@@ -291,6 +291,8 @@ public class MuberRestController {
 		}
 		return new Gson().toJson(aMap);
 	}
+	
+	
   /*
    * Obtener la información de un conductor (nombre de usuario, viajes realizados, puntaje promedio y fecha de licencia)
    * curl -G -d "conductorId=1" http://localhost:8080/MuberRESTful/rest/services/conductores/detalles

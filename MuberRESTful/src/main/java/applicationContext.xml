@@ -124,7 +124,7 @@
 		</property>
 	</bean>
 
-	<bean id="passengerServiceTarget" class="bd2.Muber.services.impl.PassengerService"
+	<bean id="passengerServiceTarget" class="bd2.Muber.services.impl.PassengerServiceImpl"
 		parent="baseService">
 	</bean>
 
@@ -143,7 +143,7 @@
 		</property>
 	</bean>
 	
-	<bean id="driverServiceTarget" class="bd2.Muber.services.impl.DriverService"
+	<bean id="driverServiceTarget" class="bd2.Muber.services.impl.DriverServiceImpl"
 		parent="baseService">
 	</bean>
 	
@@ -162,7 +162,7 @@
 		</property>
 	</bean>
 	
-	<bean id="tripServiceTarget" class="bd2.Muber.services.impl.TripService"
+	<bean id="tripServiceTarget" class="bd2.Muber.services.impl.TripServiceImpl"
 		parent="baseService">
 	</bean>
 	
@@ -181,7 +181,7 @@
 		</property>
 	</bean>
 	
-	<bean id="scoreServiceTarget" class="bd2.Muber.services.impl.ScoreService"
+	<bean id="scoreServiceTarget" class="bd2.Muber.services.impl.ScoreServiceImpl"
 		parent="baseService">
 	</bean>
 	
