@@ -13,8 +13,8 @@ import bd2.Muber.model.Trip;
  */
 public class ScoreDTO {
 	private Long idScore;
-	private Trip trip;
-	private Passenger passenger;
+	private TripDTO trip;
+	private PassengerDTO passenger;
 	private Integer	score;
 	private String description;
 	
@@ -29,7 +29,7 @@ public class ScoreDTO {
 	/**
 	 * @return the trip
 	 */
-	public Trip getTrip() {
+	public TripDTO getTrip() {
 		return trip;
 	}
 
@@ -37,13 +37,13 @@ public class ScoreDTO {
 	 * @param trip the trip to set
 	 */
 	public void setTrip(Trip trip) {
-		this.trip = trip;
+		this.trip = new TripDTO(trip);
 	}
 
 	/**
 	 * @return the passenger
 	 */
-	public Passenger getPassenger() {
+	public PassengerDTO getPassenger() {
 		return passenger;
 	}
 
@@ -51,7 +51,7 @@ public class ScoreDTO {
 	 * @param passenger the passenger to set
 	 */
 	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
+		this.passenger = new PassengerDTO(passenger);
 	}
 
 	/**
