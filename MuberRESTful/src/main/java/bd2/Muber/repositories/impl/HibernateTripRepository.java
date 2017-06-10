@@ -114,33 +114,40 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 	
 	@Override
 	public Boolean updateTrip(Long tripId, Long passengerId){
-		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
+		try {
+			Session session = this.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+			Query query = session.createQuery(hql);
+			query.setParameter(0, passengerId);
+			Passenger aPassenger = (Passenger) query.uniqueResult();
+			 
+			String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
+			Query query1 = session.createQuery(hql1);
+			query1.setParameter(0, tripId);
+			Trip aTrip = (Trip) query1.uniqueResult();
 		
-		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, passengerId);
-		Passenger aPassenger = (Passenger) query.uniqueResult();
-		 
-		String hql1 = "FROM bd2.Muber.model.Trip T WHERE T.idTrip = ?";
-		Query query1 = session.createQuery(hql1);
-		query1.setParameter(0, tripId);
-		Trip aTrip = (Trip) query1.uniqueResult();
-	
-		session.saveOrUpdate(aTrip);
-		if (aTrip.addPassenger(aPassenger)){
-			tx.commit();
-			session.disconnect();
-			session.close();
-			return true;
-		}else{
-			tx.rollback();
-			session.disconnect();
-			session.close();
+			session.saveOrUpdate(aTrip);
+			if (aTrip.addPassenger(aPassenger)){
+				tx.commit();
+				session.disconnect();
+				session.close();
+				return true;
+			}else{
+				tx.rollback();
+				session.disconnect();
+				session.close();
+				return false;
+			}
+		}
+		catch(Exception e){			
 			return false;
 		}
-		
 	}
+		
+		
+	
 	
 	@Override
 	public String closeTrip(Long tripId){
