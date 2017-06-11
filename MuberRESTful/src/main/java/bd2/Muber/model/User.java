@@ -1,15 +1,20 @@
 package bd2.Muber.model;
 
+/**
+ * User Class. It works as a super class for Passenger and Driver
+ */
 public class User {
 	
 	private Long idUser;
 	private String fullName;
 	private String password;
-	
 	public User(){
 		
 	}
 	
+	/**
+	 * User object's constructor
+	 */
 	public User(String fullname, String password){
 		this.fullName = fullname;
 		this.password = password;

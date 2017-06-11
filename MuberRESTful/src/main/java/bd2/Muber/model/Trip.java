@@ -9,13 +9,37 @@ import java.util.Iterator;
 public class Trip {
 
 	private Long idTrip;
+	/**
+    * A collection of the passengers singed up for the trip
+    */
 	private Collection<Passenger> passengers;
+	/**
+    * A collection of scores to filled up once the state of the trips goes to closed.
+    */
 	private Collection<Score> scores;
+	/**
+    * The Driver who created the trip.
+    */
 	private Driver driver;
+	/**
+    * Date of creation
+    */
 	private Date date;
+	/**
+    * Max quantity of passengers allowed to sing up for the trip.
+    */
 	private Integer maxPassenger;
+	/**
+    * The state of the trip, open or closed. It can only be closed once. 
+    */
 	private Boolean state;
+	/**
+    * The price of the fuul trip
+    */
 	private double price;
+	/**
+    * Places of origin an destination.
+    */
 	private String origin;
 	private String destination;
 	
@@ -24,7 +48,9 @@ public class Trip {
 		this.scores = new HashSet<Score>();	
 		this.state = true;
 	}
-	
+	/**
+    * Trip object's constructor.
+    */
 	public Trip(Driver driver, Date date,Integer maxPassenger, double price, String origin, String destination){
 		this.driver = driver;
 		this.date = date;
@@ -52,7 +78,14 @@ public class Trip {
 	public void setPassengers(Collection<Passenger> passengers) {
 		this.passengers = passengers;
 	}
-	
+	/**
+    * Adds a passenger to the collection of passengers singed up only if there is space available.
+    * 
+    * @param size  the current amount of passengers singed up
+    * @param maxPassenger  the top amount of passenger allowed to sing up.
+    * 
+    * returns true or false according to success or failure.
+    */
 	public boolean addPassenger(Passenger passenger){
 		if(this.passengers.size() < this.maxPassenger){
 			this.passengers.add(passenger);
@@ -104,7 +137,15 @@ public class Trip {
 	public void setIdTrip(Long idTrip) {
 		this.idTrip = idTrip;
 	}
-	
+	/**
+    * Iterates through the score collection and calculates the average score. Adding all the values and dividing
+    * for the amount of scores.
+    * 
+    * @param average  variable where the average is calculated and saved
+    * @param score.size  the amount of scores in the collection
+    * 
+    * @return average  the average score of the trip
+    */
 	public float getAverageScore(){
 		float average = 0;
 		if(scores.size() > 0){
@@ -124,6 +165,19 @@ public class Trip {
 		this.state = state;
 	}
 
+	/**
+    * Closes the Trip. It will only close once, if the trip was already clased this will retun false.
+    * Closing the Trip: 
+    *   set it's state to false, 
+    *   divide the total prize of the trip according to the amount of passengers
+    *   iterates through all of the passengers subtracting the corresponding amount.
+    *   
+    * @param price   Total amount of credits the Trips is worth
+    * @param amount  The price divided by the size of the passenger collection.
+    * 
+    * @return true or false according to success or failure
+    * 
+    */
 	public boolean close() {
 		if (this.state == true){			
 			this.state = false;

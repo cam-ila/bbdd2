@@ -54,7 +54,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		return driversDTO;
 	}
 	
-	//TODO chequear, que no resolvemos lo del top 10 en la consulta. Eso esta bien?
 	
 	public List<DriverDTO> getDriversTop10(){ 
 		Session session = this.getSession();	
