@@ -5,7 +5,9 @@ import org.hibernate.SessionFactory;
 
 public class BaseHibernateRepository{
 	SessionFactory sessionFactory;
-	
+	/**
+	 * This class constructor. 
+	 */
 	public BaseHibernateRepository(){
 	
 	}

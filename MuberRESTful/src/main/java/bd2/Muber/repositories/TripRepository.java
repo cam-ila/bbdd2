@@ -5,6 +5,9 @@ import java.util.List;
 
 import bd2.Muber.dto.TripDTO;
 
+/**
+ * The interface for the Trip Repository. 
+ */
 public interface TripRepository extends BaseRepository {
 
 	List<TripDTO> getTrips();

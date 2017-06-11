@@ -11,9 +11,16 @@ import bd2.Muber.dto.DriverDTO;
 
 import bd2.Muber.model.*;
 import bd2.Muber.repositories.DriverRepository;
-
+/**
+ * The Driver's repository implementation class. 
+ */
 public class HibernateDriverRepository extends BaseHibernateRepository implements DriverRepository{
 	
+	/**
+	 *  Asks for a Driver using an id to the DB and saves it on a DriverDTO object before returning it.
+	 *  
+	 *  @retun driverDTO  an object of the class DriverDTO
+	 */
 	public DriverDTO getDriver(Long id){
 		Session session = this.getSession();	
 		Transaction tx = null;
@@ -34,6 +41,12 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		return driverDTO;
 	}
 	
+	/**
+	 *  Asks for all the Drivers to the DB and saves one by one on a DriverDTO object to put it on a 
+	 *  list of DriverDTO objects before returning the list.
+	 *  
+	 *  @retun driversDTO  a list of DriverDTO objects
+	 */
 	public List<DriverDTO> getDrivers(){
 		Session session = this.getSession();	
 		Transaction tx = null;

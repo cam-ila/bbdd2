@@ -18,7 +18,11 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 	public HibernatePassengerRepository(){
 		super();
 	}
-	
+	/**
+	 *  Asks for a Passenger using an id to the DB and saves it on a PassengerDTO object before returning it.
+	 *  
+	 *  @retun passengerDTO  an object of the class PassengerDTO
+	 */
 	public PassengerDTO getPassenger(Long id){
 		Session session = this.getSession();	
 		Transaction tx = session.beginTransaction();
@@ -35,7 +39,12 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		session.close();
 		return passengerDTO;
 	}
-	
+	/**
+	 *  Asks for all the Passenger to the DB and saves one by one on a PassengerDTO object to put it on a 
+	 *  list of PassengerDTO objects before returning the list.
+	 *  
+	 *  @retun passengersDTO  a list of PassengerDTO objects
+	 */
 	public List<PassengerDTO> getPassengers(){
 		Session session = this.getSession();	
 		Transaction tx = session.beginTransaction();
@@ -53,6 +62,12 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		return passengerDTO;
 	}
 	
+	/**
+	 *  Adds credit to a specific passenger according to a passengerID
+	 *  
+	 *  @param monto  numerical amount of credits to be added.
+	 *  
+	 */
 	public void updateCreditPassenger(Long passengerId, Double monto){
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();

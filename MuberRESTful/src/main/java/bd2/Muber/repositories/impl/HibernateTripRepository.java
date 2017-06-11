@@ -22,7 +22,11 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 	public HibernateTripRepository(){
 		super();
 	}
-	
+	/**
+	 *  Asks for a Trip using an id to the DB and saves it on a TripDTP object before returning it.
+	 *  
+	 *  @retun tripDTO  an object of the class TripDTO
+	 */
 	@Override
 	public TripDTO getTrip(Long id){
 		Session session = this.getSession();	
@@ -43,6 +47,14 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		return tripDTO;
 	}
 	
+	
+	/**
+	 *  Asks for all the Trips with the state "open" to the DB
+	 *  and saves them one by one on a TripDTO object to put it on a 
+	 *  list of TripDTO objects before returning the list.
+	 *  
+	 *  @retun tripsDTO  a list of TripDTO objects
+	 */
 	@Override
 	public List<TripDTO> getOpenedTrips(){
 		Session session = this.getSession();	
@@ -62,6 +74,13 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		return tripsDTO;
 	}
 	
+	/**
+	 *  Asks for all the Trips with the state "clased" to the DB
+	 *  and saves them one by one on a TripDTO object to put it on a 
+	 *  list of TripDTO objects before returning the list.
+	 *  
+	 *  @retun tripsDTO  a list of TripDTO objects
+	 */
 	@Override
 	public List<TripDTO> getClosedTrips(){
 		Session session = this.getSession();	
@@ -82,7 +101,11 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		session.close();
 		return tripsDTO;
 	}
-	
+	/**
+	 *  Creates a new trip linked to a Driver ID that made the request.
+	 *  
+	 *  @retun true or false according to success or failure
+	 */
 	@Override
 	public Boolean saveTrip(Long idDriver,Date date, Integer maxPassenger, Double price,String origin,String destination){
 		Session session = this.getSession();
@@ -112,6 +135,11 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		
 	}
 	
+	/**
+	 *  Adds a new passenger to the list of passengers singed up for the trip.
+	 *  
+	 *  @retun true or false according to success or failure
+	 */
 	@Override
 	public Boolean updateTrip(Long tripId, Long passengerId){
 		try {
@@ -148,7 +176,11 @@ public class HibernateTripRepository extends BaseHibernateRepository implements 
 		
 		
 	
-	
+	/**
+	 *  Tries to close a trip. It will only succeed if the trip was opened. 
+	 *  
+	 *  @retun string   indicating if the closing of the trip was successful or not.
+	 */
 	@Override
 	public String closeTrip(Long tripId){
 		Session session = this.getSession();
