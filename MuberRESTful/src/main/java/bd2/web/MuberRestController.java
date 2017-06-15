@@ -12,7 +12,6 @@ import java.util.Map;
 
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +63,6 @@ public class MuberRestController {
 		return new Gson().toJson(aMap);		
 	}
 	
-	//TODO: ARREGLAR, ERROR DE LA SESION
 	//Listar todos los viajes abiertos en Muber
 	@RequestMapping(value = "/abiertos", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String abiertos() {
