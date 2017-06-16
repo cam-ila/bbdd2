@@ -1,6 +1,7 @@
 Trabajo Practico 2
 ==================
 
+
 Parte 1: Bases de Datos NoSQL y Relacionales
 --------------------------------------------
 
@@ -10,19 +11,76 @@ Responda las siguientes preguntas, considerando MongoDB en particular como Base
 de Datos NoSQL.
 
 1. ¿Cuáles de los siguientes conceptos de RDBMS existen en MongoDB? En caso de
-   no existir, ¿hay alguna alternativa? ¿Cuál es?
-• Base de Datos
-• Tabla / Relación
-• Fila / Tupla
-• Columna
+no existir, ¿hay alguna alternativa? ¿Cuál es?
+
+- Base de Datos
+		Si existe el concepto.
+- Tabla / Relación
+		En lugar de tablas, los datos se almacenan en carpetas (collections).
+		Las relaciones en MongoDB representan cómo varios documentos están
+lógicamente relacionados entre sí.
+- Fila / Tupla
+- Columna
+		Los documentos en formato BSON sustituyen a las líneas, definiendo campos en
+las columnas de las tablas SQL.
+		Un documento MongoDB es, de esta forma, una colección de pares clave/valor,
+como lo son, en principio, las filas en las tablas de MySQL.
+
 
 2. MongoDB tiene soporte para transacciones, pero no es igual que el de los
-   RDBMS. ¿Cuál es el alcance de una transacción en MongoDB?
+RDBMS. ¿Cuál es el alcance de una transacción en MongoDB?
+
+	En mongoBD, una operacion write es atomica al nivel de un unico documento,
+incluso si la operacion modifica multiples documentos embebidos dentro de un
+unico documento.
+	Cuando una sola operacion write modifica multiples documentos, la
+modificacion de cada documento es atomica, pero la operacion en si no es
+atomica y otras
+operaciones pueden mezclarse. Sin embargo, se puede aislar una sola operacion
+write que afecte a multiples documentos usando el operador $isolated.
+	Esto asegura que ningun cliente ve los cambios hasta que la operacion write
+se completa o se va por error.
 
 3. Para acelerar las consultas, MongoDB tiene soporte para índices. ¿Qué tipos
-   de índices soporta?
+de índices soporta?
+
+Single Field:
+		Mongo soporta la creacion de un index ascendiente/descendiente definido por
+el usuario en un solo campo en un documento.
+
+Compound Index:
+		Tambien soporta indices definidos por el usuario en multiples campos. El
+	orden de los campos listados tiene importancia. 
+	{ userid: 1, score: -1 } en este caso por ejemplo el indice ordena primero
+por userid y despues dentro de cada userid ordena por Score.
+
+MultiKey Index:
+	Usa estas para ordenar el contenido guardado en arreglos. Si alguien crea un
+indice con un campo que contenga un array, mongoDB crea un indice separado para
+cada elemento del arreglo.
+
+GeoSpacial Index:
+	Para soportar queries eficientes de coordenadas de datos geoespaciales. 
+	Hay 2 opciones: 
+		-	2d indexes: que usan geometria planar
+		- 2dsphere indexes: usa geometria esferica para devolver los resultados
+
+Text Index:
+	Para buscar contenido de strings en colecciones.
+
+Hashed Index:
+	Indexa el valor de hash de un campo.
+
 
 4. ¿Existen claves foráneas en MongoDB?
+
+	El no tener el concepto de una tabla, o de una integridad referencial con su
+relación de clave maestra a clave foránea, se hace difícil imaginar cómo puede
+funcionar y cómo pueden relacionarse y entenderse los datos.
+	MongoDB tiene el concepto de la información almacenada como clave/valor.
+Estos pares se almacenan en forma de documento u objeto dentro de una
+colección.
+
 
 
 Parte 2: Primeros pasos con MongoDB
@@ -50,6 +108,7 @@ WriteResult({ "nInserted" : 1 })
 Se le agrega un Object Id.
 
 6. Agregue los siguientes documentos a la colección de hoteles:
+
 ```js
 > db.hoteles.save({nombre:'Hotel Lux', estrellas:3, amenities: ['piscina', 'gimnasio']})
 WriteResult({ "nInserted" : 1 })
@@ -99,6 +158,7 @@ WriteResult({ "nInserted" : 1 })
 ```
 
 Hoteles con 3 estrellas:
+
 ```js
 > db.hoteles.find({"estrellas":3 })
 { "_id" : ObjectId("5940af300a11111bb7d5e795"), "nombre" : "Hotel Avenida", "estrellas" : 3 }
@@ -116,6 +176,7 @@ Hoteles que incluyan la palabra 'Hotel' en su nombre:
 { "_id" : ObjectId("5940afac0a11111bb7d5e798"), "nombre" : "Genova Hotel", "estrellas" : 3 }
 ```
 Hoteles con 4 o mas estrellas:
+
 ```js
 > db.hoteles.find({"estrellas":{ $gt: 3 }} )
 { "_id" : ObjectId("5940af9f0a11111bb7d5e797"), "nombre" : "Hotel Midas", "estrellas" : 4, "amenities" : [ "piscina" ] }
@@ -123,12 +184,14 @@ Hoteles con 4 o mas estrellas:
 ```
 
 Hoteles con la palabra "Hotel" en su nombre y mas de 3 estrellas
+
 ```js
 > db.hoteles.find({"nombre": /Hotel/, "estrellas":{$gt: 3}})
 { "_id" : ObjectId("5940af9f0a11111bb7d5e797"), "nombre" : "Hotel Midas", "estrellas" : 4, "amenities" : [ "piscina" ] }
 ```
 
 Hoteles con piscina:
+
 ```js
 > db.hoteles.find({"amenities": "piscina"})
 { "_id" : ObjectId("5940af8f0a11111bb7d5e796"), "nombre" : "Hotel Lux", "estrellas" : 3, "amenities" : [ "piscina", "gimnasio" ] }
@@ -136,6 +199,7 @@ Hoteles con piscina:
 ```
 
 Hoteles sin amenities (es decir, que el atributo este ausente)
+
 ```js
 > db.hoteles.find({"amenities": null })
 { "_id" : ObjectId("5940af300a11111bb7d5e795"), "nombre" : "Hotel Avenida", "estrellas" : 3 }
@@ -143,6 +207,7 @@ Hoteles sin amenities (es decir, que el atributo este ausente)
 ```
 
 Hoteles sin aminities, proyectando solo el nombre:
+
 ```js
 > db.hoteles.find({"amenities": null }, {_id:0, nombre: 1})
 { "nombre" : "Hotel Avenida" }
@@ -188,10 +253,6 @@ WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
 { "_id" : ObjectId("5940afac0a11111bb7d5e798"), "nombre" : "Genova Hotel", "estrellas" : 3 }
 { "_id" : ObjectId("5940afc10a11111bb7d5e799"), "nombre" : "Paris Suites", "estrellas" : 5, "amenities" : [ "sauna" ] }
 ```
-
-
-Si amenities no existe
-$exists:false
 
 Parte 3: 
 --------
@@ -244,25 +305,6 @@ Agrego un indice
 	"numIndexesAfter" : 2,
 	"ok" : 1
 }
-> db.hoteles.getIndexes()
-[
-	{
-		"v" : 2,
-		"key" : {
-			"_id" : 1
-		},
-		"name" : "_id_",
-		"ns" : "turismo.hoteles"
-	},
-	{
-		"v" : 2,
-		"key" : {
-			"nombre" : 1
-		},
-		"name" : "nombre_1",
-		"ns" : "turismo.hoteles"
-	}
-]
 
 > db.hoteles.find({nombre: /11/}).explain("executionStats")
 
@@ -357,12 +399,24 @@ Esto lo da la catedra para convertir los precios de String a Float.
 > db.habitaciones.find().forEach( function (x) {x.precio = parseFloat(x.precio); db.habitaciones.save(x); });
 ```
 
-Usando la coleccion que habiamos creado, le agregamos las habitaciones guardandolas es cordobaConHabitaciones
+Usando la coleccion que habiamos creado, le agregamos las habitaciones
+guardandolas es cordobaConHabitaciones
 ```js
-> db.cordoba.aggregate([ { $lookup:{from: "habitaciones", localField: "nombre", foreignField: "nombreHotel", as: "habitaciones" }}, {$out: "cordobaConHabitaciones"}])
+> db.cordoba.aggregate([ {
+		$lookup:{
+			from: "habitaciones", 
+			localField: "nombre", 
+			foreignField: "nombreHotel", 
+			as: "habitaciones" 
+		}
+	}, 
+	{
+		$out: "cordobaConHabitaciones"
+	}])
 ```
 
-16.Usando la colección del punto anterior, obtenga el promedio de precio de habitación para cada hotel.
+16.Usando la colección del punto anterior, obtenga el promedio de precio de
+habitación para cada hotel.
 
 ```js
 > db.cordobaConHabitaciones.aggregate([
