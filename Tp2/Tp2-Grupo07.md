@@ -1,5 +1,12 @@
-Trabajo Practico 2
-==================
+Trabajo Practico 2 - Grupo 07
+=============================
+
+Integrantes
+-----------
+
+Bignone Camila 11867/0
+
+Gianni Ballerini 12120/4
 
 
 Parte 1: Bases de Datos NoSQL y Relacionales
@@ -11,58 +18,57 @@ Responda las siguientes preguntas, considerando MongoDB en particular como Base
 de Datos NoSQL.
 
 1. ¿Cuáles de los siguientes conceptos de RDBMS existen en MongoDB? En caso de
-no existir, ¿hay alguna alternativa? ¿Cuál es?
+   no existir, ¿hay alguna alternativa? ¿Cuál es?
 
 - Base de Datos
 		Si existe el concepto.
 - Tabla / Relación
-		En lugar de tablas, los datos se almacenan en carpetas (collections).
-		Las relaciones en MongoDB representan cómo varios documentos están
-lógicamente relacionados entre sí.
-- Fila / Tupla
-- Columna
-		Los documentos en formato BSON sustituyen a las líneas, definiendo campos en
-las columnas de las tablas SQL.
-		Un documento MongoDB es, de esta forma, una colección de pares clave/valor,
-como lo son, en principio, las filas en las tablas de MySQL.
+      En lugar de tablas, los datos se almacenan en carpetas (collections).
+      Las relaciones en MongoDB se representan cómo varios documentos que están
+    lógicamente relacionados entre sí.
+- Fila / Tupla / Columna
+      Los documentos en formato BSON sustituyen a las líneas, definiendo campos
+    en las columnas de las tablas SQL.
+      Un documento MongoDB es, de esta forma, una colección de pares clave/valor,
+    como lo son, en principio, las filas en las tablas de MySQL.
 
 
 2. MongoDB tiene soporte para transacciones, pero no es igual que el de los
-RDBMS. ¿Cuál es el alcance de una transacción en MongoDB?
+   RDBMS. ¿Cuál es el alcance de una transacción en MongoDB?
 
-	En mongoBD, una operacion write es atomica al nivel de un unico documento,
-incluso si la operacion modifica multiples documentos embebidos dentro de un
-unico documento.
-	Cuando una sola operacion write modifica multiples documentos, la
-modificacion de cada documento es atomica, pero la operacion en si no es
-atomica y otras
-operaciones pueden mezclarse. Sin embargo, se puede aislar una sola operacion
-write que afecte a multiples documentos usando el operador $isolated.
-	Esto asegura que ningun cliente ve los cambios hasta que la operacion write
-se completa o se va por error.
+    En mongoBD, una operacion write es atomica al nivel de un unico documento,
+  incluso si la operacion modifica multiples documentos embebidos dentro de un
+  unico documento.
+    Cuando una sola operacion write modifica multiples documentos, la
+  modificacion de cada documento es atomica, pero la operacion en si no lo es y
+  otras operaciones pueden mezclarse. 
+    Sin embargo, se puede aislar una sola operacion write que afecte a multiples
+  documentos usando el operador $isolated.
+    Esto asegura que ningun cliente ve los cambios hasta que la operacion write
+  se completa o se va por error.
 
 3. Para acelerar las consultas, MongoDB tiene soporte para índices. ¿Qué tipos
 de índices soporta?
 
 Single Field:
-		Mongo soporta la creacion de un index ascendiente/descendiente definido por
-el usuario en un solo campo en un documento.
+    Mongo soporta la creacion de un index ascendiente/descendiente definido por
+    el usuario en un solo campo en un documento.
 
 Compound Index:
-		Tambien soporta indices definidos por el usuario en multiples campos. El
-	orden de los campos listados tiene importancia. 
-	{ userid: 1, score: -1 } en este caso por ejemplo el indice ordena primero
-por userid y despues dentro de cada userid ordena por Score.
+    Tambien soporta indices definidos por el usuario en multiples campos. El
+    orden de los campos listados tiene importancia. 
+  { userid: 1, score: -1 } en este caso por ejemplo el indice ordena primero
+  por userid y despues dentro de cada userid ordena por Score.
 
 MultiKey Index:
-	Usa estas para ordenar el contenido guardado en arreglos. Si alguien crea un
-indice con un campo que contenga un array, mongoDB crea un indice separado para
-cada elemento del arreglo.
+    Usa estas para ordenar el contenido guardado en arreglos. Si alguien crea
+  un indice con un campo que contenga un array, mongoDB crea un indice
+  separado para cada elemento del arreglo.
 
 GeoSpacial Index:
 	Para soportar queries eficientes de coordenadas de datos geoespaciales. 
 	Hay 2 opciones: 
-		-	2d indexes: que usan geometria planar
+		- 2d indexes: que usan geometria planar
 		- 2dsphere indexes: usa geometria esferica para devolver los resultados
 
 Text Index:
@@ -74,13 +80,11 @@ Hashed Index:
 
 4. ¿Existen claves foráneas en MongoDB?
 
-	El no tener el concepto de una tabla, o de una integridad referencial con su
-relación de clave maestra a clave foránea, se hace difícil imaginar cómo puede
-funcionar y cómo pueden relacionarse y entenderse los datos.
-	MongoDB tiene el concepto de la información almacenada como clave/valor.
-Estos pares se almacenan en forma de documento u objeto dentro de una
-colección.
-
+    Al no tener el concepto de una tabla, o de una integridad referencial con su
+  relación de clave maestra a clave foránea, se hace difícil imaginar cómo
+  puede funcionar y cómo pueden relacionarse y entenderse los datos.
+    MongoDB tiene el concepto de información almacenada como clave/valor. Estos
+  pares se almacenan en forma de documento u objeto dentro de una colección.
 
 
 Parte 2: Primeros pasos con MongoDB
@@ -110,51 +114,12 @@ Se le agrega un Object Id.
 6. Agregue los siguientes documentos a la colección de hoteles:
 
 ```js
-> db.hoteles.save({nombre:'Hotel Lux', estrellas:3, amenities: ['piscina', 'gimnasio']})
-WriteResult({ "nInserted" : 1 })
-> db.hoteles.save({nombre:'Hotel Midas', estrellas:4, amenities: ['piscina']})
-WriteResult({ "nInserted" : 1 })
-> db.hoteles.save({nombre:'Genova Hotel', estrellas:3})
-WriteResult({ "nInserted" : 1 })
-> db.hoteles.save({nombre:'Paris Suites', estrellas:5, amenities: ['sauna']})
-WriteResult({ "nInserted" : 1 })
-
-> db.hoteles.find().pretty()
-{
-    "_id" : ObjectId("5940af300a11111bb7d5e795"),
-      "nombre" : "Hotel Avenida",
-        "estrellas" : 3
-}
-{
-    "_id" : ObjectId("5940af8f0a11111bb7d5e796"),
-      "nombre" : "Hotel Lux",
-        "estrellas" : 3,
-          "amenities" : [
-              "piscina",
-                  "gimnasio"
-                    ]
-}
-{
-    "_id" : ObjectId("5940af9f0a11111bb7d5e797"),
-      "nombre" : "Hotel Midas",
-        "estrellas" : 4,
-          "amenities" : [
-              "piscina"
-                ]
-}
-{
-    "_id" : ObjectId("5940afac0a11111bb7d5e798"),
-      "nombre" : "Genova Hotel",
-        "estrellas" : 3
-}
-{
-    "_id" : ObjectId("5940afc10a11111bb7d5e799"),
-      "nombre" : "Paris Suites",
-        "estrellas" : 5,
-          "amenities" : [
-              "sauna"
-                ]
-}
+> db.hoteles.insertMany([
+{nombre:'Hotel Lux', estrellas:3, amenities: ['piscina', 'gimnasio']},
+{nombre:'Hotel Midas', estrellas:4, amenities: ['piscina']},
+{nombre:'Genova Hotel', estrellas:3},
+{nombre:'Paris Suites', estrellas:5, amenities: ['sauna']}
+])
 ```
 
 Hoteles con 3 estrellas:
@@ -254,8 +219,8 @@ WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
 { "_id" : ObjectId("5940afc10a11111bb7d5e799"), "nombre" : "Paris Suites", "estrellas" : 5, "amenities" : [ "sauna" ] }
 ```
 
-Parte 3: 
---------
+Parte 3: Indices 
+-----------------
 
 10. Busque en la colección de hoteles si existe algún índice definido.
 
@@ -361,8 +326,8 @@ Creo un indice
 ```
 Con indice 'deberia' buscar mas rapido, pero si no usa expresion regular.
 
-Parte 4
--------
+Parte 4: Aggregation Framework
+-------------------------------
 
 13. Obtenga 5 hoteles aleatorios 
 
@@ -424,14 +389,14 @@ habitación para cada hotel.
         "$addFields": { 
             "precio_promedio": {
                 "$divide": [
-                    { // devuelve la suma de precios
+                    {
                         "$reduce": {
                             "input": "$habitaciones",
                             "initialValue": 0,
                             "in": { "$add": ["$$value", "$$this.precio"] }
                         }
                     },
-                    { // devuelve el total de habitaciones
+                    { 
                         "$cond": [
                             { "$ne": [ { "$size": "$habitaciones" }, 0 ] },
                             { "$size": "$habitaciones" }, 
@@ -443,9 +408,6 @@ habitación para cada hotel.
         }
     }           
 ])
-```
-```js
-db.cordoba_conHabitaciones.aggregate([{"$addFields": {"precio_promedio": {"$divide": [{"$reduce": {"input": "$habitaciones", "initialValue": 0, "in": { "$add": ["$$value", "$$this.precio"] } } }, {"$cond": [{ "$ne": [ { "$size": "$habitaciones" }, 0 ] }, { "$size": "$habitaciones" }, 1 ] } ] } } } ]).pretty()
 ```
 
 Una parte como ejemplo de lo que devolvio la consulta
